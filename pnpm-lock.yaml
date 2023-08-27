@@ -26,9 +26,18 @@ devDependencies:
   edgedb:
     specifier: ^1.3.5
     version: 1.3.5
+  lucide-svelte:
+    specifier: ^0.269.0
+    version: 0.269.0(svelte@4.2.0)
   malachite-ui:
     specifier: ^0.9.1
     version: 0.9.1
+  prettier:
+    specifier: ^3.0.2
+    version: 3.0.2
+  prettier-plugin-svelte:
+    specifier: ^3.0.3
+    version: 3.0.3(prettier@3.0.2)(svelte@4.2.0)
   svelte:
     specifier: ^4.0.5
     version: 4.2.0
@@ -1065,6 +1074,14 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lucide-svelte@0.269.0(svelte@4.2.0):
+    resolution: {integrity: sha512-yMYxtGB5oOf0+j+FnlyZpBnOzh6uInzDMIZB+rzAx4hjx4atB7nAZBj4lWrRoXFn4aduP1Ff84D4hLV5Va+k0Q==}
+    peerDependencies:
+      svelte: '>=3 <5'
+    dependencies:
+      svelte: 4.2.0
+    dev: true
+
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
     engines: {node: '>=12'}
@@ -1279,6 +1296,22 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+    dev: true
+
+  /prettier-plugin-svelte@3.0.3(prettier@3.0.2)(svelte@4.2.0):
+    resolution: {integrity: sha512-dLhieh4obJEK1hnZ6koxF+tMUrZbV5YGvRpf2+OADyanjya5j0z1Llo8iGwiHmFWZVG/hLEw/AJD5chXd9r3XA==}
+    peerDependencies:
+      prettier: ^3.0.0
+      svelte: ^3.2.0 || ^4.0.0-next.0
+    dependencies:
+      prettier: 3.0.2
+      svelte: 4.2.0
+    dev: true
+
+  /prettier@3.0.2:
+    resolution: {integrity: sha512-o2YR9qtniXvwEZlOKbveKfDQVyqxbEIWn48Z8m3ZJjBjcCmUy3xZGIv+7AkaeuaTr6yPXJjwv07ZWlsWbEy1rQ==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /queue-microtask@1.2.3:
