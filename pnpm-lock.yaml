@@ -29,6 +29,9 @@ devDependencies:
   typescript:
     specifier: ^5.0.0
     version: 5.2.2
+  valibot:
+    specifier: ^0.13.1
+    version: 0.13.1
   vite:
     specifier: ^4.4.2
     version: 4.4.9
@@ -1053,6 +1056,10 @@ packages:
     engines: {node: '>=14.0'}
     dependencies:
       busboy: 1.6.0
+    dev: true
+
+  /valibot@0.13.1:
+    resolution: {integrity: sha512-SG2W1RHqE2LShl3p6tyERt6I+G6PQa9ZFVfkyNKXz01HBzL+tBeH5kXw/5AQeAzPJSjI3djVGBl1CyozA1kyBQ==}
     dev: true
 
   /vite@4.4.9:
