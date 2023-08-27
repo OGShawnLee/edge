@@ -20,6 +20,9 @@ devDependencies:
   edgedb:
     specifier: ^1.3.5
     version: 1.3.5
+  malachite-ui:
+    specifier: ^0.9.1
+    version: 0.9.1
   svelte:
     specifier: ^4.0.5
     version: 4.2.0
@@ -1068,6 +1071,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /malachite-ui@0.9.1:
+    resolution: {integrity: sha512-Sf0ORZY5nj8ZbQH08ddFLLh6tViMpt/xkYMvuedym7I2GKHb3hIzgXAVciyoETc8j89t7dFMBfNpIOjDA96e3A==}
     dev: true
 
   /mdn-data@2.0.30:
