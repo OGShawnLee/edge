@@ -20,6 +20,9 @@ devDependencies:
   '@unocss/transformer-directives':
     specifier: ^0.55.3
     version: 0.55.3
+  '@unocss/transformer-variant-group':
+    specifier: ^0.55.3
+    version: 0.55.3
   edgedb:
     specifier: ^1.3.5
     version: 1.3.5
