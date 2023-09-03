@@ -1,7 +1,7 @@
 <script lang="ts">
-	import UserStatus from "./SidebarUserStatus.svelte";
 	import Link from "./SidebarLink.svelte";
-	import { Home, Twitter } from "lucide-svelte";
+	import UserStatus from "./SidebarUserStatus.svelte";
+	import { Home, UserCircle, Twitter } from "lucide-svelte";
 
 	export let user: JWTPayloadState | null;
 </script>
@@ -13,6 +13,7 @@
 	{#if user}
 		<div class="flex flex-col items-start gap-6">
 			<Link href="/home" text="Home" icon={Home} />
+			<Link href="/{user.display_name}" text="Profile" icon={UserCircle} />
 		</div>
 	{/if}
 	<div class="w-full mt-auto">

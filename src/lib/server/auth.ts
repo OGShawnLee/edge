@@ -1,9 +1,13 @@
 import type { JWTPayloadState } from "@types";
 import type { Cookies } from "@sveltejs/kit";
 import { ACCESS_TOKEN, AUTH_COOKIE } from "$env/static/private";
-import { verify } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { isInterface, isNullish, isString, isWhitespace } from "malachite-ui/predicate";
 import { use_catch } from "$lib/hooks";
+
+export function create_user_jwt(payload: JWTPayloadState) {
+	return sign(payload, ACCESS_TOKEN, { expiresIn: "3d" });
+}
 
 export function delete_auth_cookie(cookies: Cookies) {
 	cookies.set(AUTH_COOKIE, "", { expires: new Date(Date.now() - 3600), httpOnly: true, path: "/" });
@@ -40,4 +44,12 @@ export function is_auth_token_state(value: unknown): value is JWTPayloadState {
 		display_name: isString,
 		name: isString
 	});
+}
+
+export function set_auth_cookie(
+	cookies: Cookies,
+	payload: { id: string; display_name: string; name: string }
+) {
+	const token = create_user_jwt(payload);
+	cookies.set(AUTH_COOKIE, token, { maxAge: 60 * 60 * 24 * 3, httpOnly: true, path: "/" });
 }

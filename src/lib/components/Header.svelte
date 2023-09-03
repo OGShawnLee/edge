@@ -15,6 +15,6 @@
 				</div>
 			{/if}
 		</div>
-		<slot name="button" />
+		<slot />
 	</div>
 </header>

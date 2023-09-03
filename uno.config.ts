@@ -1,10 +1,12 @@
 import transformer_directives from "@unocss/transformer-directives";
 import transformer_variant_group from "@unocss/transformer-variant-group";
-import { defineConfig } from "unocss";
+import { defineConfig } from "unocss/vite";
 
 export default defineConfig({
   shortcuts: {
-    "black-ring-white": "outline-none border-2 border-transparent focus:(border-black ring-2 ring-white)"
+    "black-ring-white": "outline-none border-2 border-transparent focus:(border-black ring-2 ring-white)",
+    button: "h-10 min-h-10 outline-none border-2 font-medium focus:(ring-2 ring-white)",
+		"button--zinc": "bg-transparent border-zinc-800 text-zinc-100 hover:bg-zinc-800"
   },
   theme: {
     colors: {
@@ -23,7 +25,7 @@ export default defineConfig({
     },
     fontFamily: {
       victor: ["Victor Mono", "monospace"],
-      inter: ["Inter", "sans-serif"]
+      roboto: ["Roboto", "sans-serif"]
     }
   },
   transformers: [transformer_directives(), transformer_variant_group()],

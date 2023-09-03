@@ -14,6 +14,12 @@ module default {
             constraint min_len_value(1);
             constraint max_len_value(50);
         };
+        description: str {
+            constraint max_len_value(175);
+        };
+        location: str {
+            constraint max_len_value(30);
+        };
         required email: str {
             constraint exclusive;
             constraint max_len_value(256);

@@ -1,6 +1,6 @@
 import type { Issues } from "valibot";
-import type { Cookies } from "@sveltejs/kit";
 import e from "edge/edgeql-js";
+import { set_auth_cookie } from "$lib/server/auth";
 import { user_schema } from "$lib/valibot";
 import { parse, pick, flatten } from "valibot";
 import { use_await, use_catch } from "$lib/hooks";
@@ -8,8 +8,6 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { get_client } from "$lib/server/client";
 import { compare } from "bcrypt";
 import { isNullish } from "malachite-ui/predicate";
-import { ACCESS_TOKEN, AUTH_COOKIE } from "$env/static/private";
-import { sign } from "jsonwebtoken";
 
 const login_schema = pick(user_schema, ["display_name", "password"]);
 
@@ -75,18 +73,7 @@ export const actions = {
 	}
 };
 
-function create_user_jwt(payload: JWTPayloadState) {
-	return sign(payload, ACCESS_TOKEN, { expiresIn: "3d" });
-}
-
 function is_correct_password(password: string, encrypted_password: string) {
 	return use_await(() => compare(password, encrypted_password));
 }
 
-function set_auth_cookie(
-	cookies: Cookies,
-	payload: { id: string; display_name: string; name: string }
-) {
-	const token = create_user_jwt(payload);
-	cookies.set(AUTH_COOKIE, token, { maxAge: 60 * 60 * 24 * 3, httpOnly: true, path: "/" });
-}
