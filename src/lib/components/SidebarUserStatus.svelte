@@ -9,10 +9,12 @@
 		<p class="text-lg text-white">{user.name}</p>
 		<p class="text-sm text-neutral-400">@{user.display_name}</p>
 	</div>
-	<a
-		class="min-h-10 px-4 | grid place-content-center | bg-zinc-800 rounded-md black-ring-white"
-		href="/auth/sign-out"
-	>
-		<LogOut />
-	</a>
+	<form action="/auth/sign-out" method="post">
+		<button
+			class="min-h-10 px-4 | grid place-content-center | bg-zinc-800 rounded-md black-ring-white"
+			type="submit"
+		>
+			<LogOut />
+		</button>
+	</form>
 </div>
