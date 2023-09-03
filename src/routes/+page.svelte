@@ -9,13 +9,13 @@
   </p>
 	<div class="flex items-center gap-3">
 		<a
-			class="min-h-10 px-8 | grid place-content-center | bg-zinc-800 rounded-lg font-medium"
+			class="min-h-10 px-8 | grid place-content-center | bg-zinc-800 rounded-md font-medium"
 			href="/auth/sign-up"
 		>
 			Sign up
 		</a>
 		<a
-			class="min-h-10 px-8 | grid place-content-center | bg-zinc-800 rounded-lg font-medium"
+			class="min-h-10 px-8 | grid place-content-center | bg-zinc-800 rounded-md font-medium"
 			href="/auth/sign-in"
 		>
 			Sign in

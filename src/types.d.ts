@@ -5,6 +5,6 @@ interface FormItemError {
 
 interface JWTPayloadState {
 	id: string;
-	displayName: string;
+	display_name: string;
 	name: string;
 }
