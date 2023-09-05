@@ -32,7 +32,7 @@
 <script lang="ts">
 	import type { Nullable } from "malachite-ui/types";
 
-	let class_name: Nullable<string> = undefined;
+	let class_name: Nullable<string> = "w-full bg-transparent";
 
 	export { class_name as class };
 	export let char_count = 0;
@@ -58,7 +58,7 @@
 	<label class="sr-only" for={id}>{label}</label>
 {/if}
 <textarea
-	class="w-full {class_name} {padding} | block | bg-transparent outline-none placeholder-zinc-400 resize-none"
+	class="{class_name} {padding} | block | outline-none placeholder-datetime-color resize-none"
 	{name}
 	{id}
 	cols="10"

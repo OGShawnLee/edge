@@ -1,20 +1,24 @@
 <script setup lang="ts">
 	import type { Maybe } from "malachite-ui/types";
+	import Separator from "./Separator.svelte";
 
 	export let display_name: Maybe<string> = undefined;
 	export let title: string;
 </script>
 
-<header class="h-20 border-b-2 border-zinc-800">
-	<div class="h-full px-8 | flex items-center justify-between">
-		<div>
-			<h1 class="text-white text-2xl font-bold">{title}</h1>
-			{#if display_name}
-				<div class="flex items-baseline justify-between gap-3">
-					<span class="text-sm text-zinc-500"> @{display_name} </span>
-				</div>
-			{/if}
+
+<div class="sticky top-88px z-10">
+	<div class="absolute bottom-full w-full h-24px | bg-background-color/90" />		
+	<header class="h-64px bg-background-color/90">
+		<div class="h-full px-24px | flex items-center justify-between">
+			<div>
+				<h1 class="text-top-color text-20px font-semibold">{title}</h1>
+				{#if display_name}
+					<span class="text-14px text-screen-name-color"> @{display_name} </span>
+				{/if}
+			</div>
+			<slot />
 		</div>
-		<slot />
-	</div>
-</header>
+	</header>
+	<Separator orientation="horizontal" />
+</div>

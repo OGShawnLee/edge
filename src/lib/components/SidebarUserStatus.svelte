@@ -6,12 +6,12 @@
 
 <div class="flex items-center justify-between">
 	<div class="flex flex-col">
-		<p class="text-lg text-white">{user.name}</p>
-		<p class="text-sm text-neutral-400">@{user.display_name}</p>
+		<p class="text-18px text-top-color">{user.name}</p>
+		<p class="text-14px text-screen-name-color">@{user.display_name}</p>
 	</div>
 	<form action="/auth/sign-out" method="post">
 		<button
-			class="min-h-10 px-4 | grid place-content-center | bg-zinc-800 rounded-md black-ring-white"
+			class="min-h-10 px-4 | grid place-content-center | bg-separator-vertical rounded-md black-ring-white"
 			type="submit"
 		>
 			<LogOut />

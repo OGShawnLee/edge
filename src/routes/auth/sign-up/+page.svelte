@@ -10,7 +10,7 @@
 </svelte:head>
 
 <div class="grid gap-4.5">
-	<header class="px-8 pb-4 | border-b-2 border-zinc-800">
+	<header class="px-24px pb-4 | border-b-2 border-zinc-800">
 		<h1 class="text-3xl text-white font-semibold">Join <b>Edge</b></h1>
 		<p class="text-sm">
 			Already have an account?
@@ -22,7 +22,7 @@
 			</a>
 		</p>
 	</header>
-	<form class="px-8 | grid gap-6" method="post">
+	<form class="px-24px | grid gap-6" method="post">
 		<Input
 			id="name"
 			icon={UserCircle}

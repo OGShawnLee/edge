@@ -15,10 +15,10 @@
 		<p class="text-sm">
 			Don't have an account?
 			<a
-				class="text-sky-400 font-medium outline-none focus:underline hover:text-sky-300"
+				class="text-emerald-400 font-medium outline-none focus:underline hover:text-sky-300"
 				href="/auth/sign-up"
 			>
-				Sign up!
+				Sign up
 			</a>
 		</p>
 	</header>

@@ -10,22 +10,20 @@ export default defineConfig({
   },
   theme: {
     colors: {
-      zinc: {
-        1000: "#121217",
-        900: "#18181B",
-        800: "#212127",
-        700: "#2A2A37",
-        600: "#414158",
-        500: "#818198",
-        400: "#9F9FAD",
-        300: "#CACACE",
-        200: "#D7D7DB",
-        100: "#E4E4E7",
-      },
+      "default-text-color": "#DCDCDC",
+      "screen-name-color": "#ADADAD",
+      "top-color": "#FFFFFF",
+      "bottom-color": "#000000",
+      "inactive-sidebar-link": "#3C3C3C",
+      "datetime-color": "#4B4B4B",
+      "separator-horizontal": "#101010",
+      "separator-vertical": "#1E1E1E",
+      "background-color": "#0C0C0C",
+      "dialog-color": "#181818",
     },
     fontFamily: {
       victor: ["Victor Mono", "monospace"],
-      roboto: ["Roboto", "sans-serif"]
+      poppins: ["Poppins", "sans-serif"]
     }
   },
   transformers: [transformer_directives(), transformer_variant_group()],

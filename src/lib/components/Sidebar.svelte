@@ -1,22 +1,22 @@
 <script lang="ts">
 	import Link from "./SidebarLink.svelte";
 	import UserStatus from "./SidebarUserStatus.svelte";
-	import { Home, UserCircle, Twitter } from "lucide-svelte";
+	import { Home, UserSquare } from "lucide-svelte";
 
 	export let user: JWTPayloadState | null;
 </script>
 
+<!-- top-header-height -> 64px + container-y-gap -> 24px = 88px -->
 <nav
-	class="sticky top-0 min-h-screen min-w-62 pt-10 pr-8 pb-8 | flex flex-col items-start gap-12 | border-r-2 border-zinc-800"
+	class="sticky h-full top-88px min-w-216px pt-16px pb-38px | flex flex-col justify-between"
 >
-	<Twitter class="mx-0 stroke-white fill-white" />
 	{#if user}
-		<div class="flex flex-col items-start gap-6">
+		<div class="flex flex-col items-start gap-32px">
 			<Link href="/home" text="Home" icon={Home} />
-			<Link href="/{user.display_name}" text="Profile" icon={UserCircle} />
+			<Link href="/{user.display_name}" text="Profile" icon={UserSquare} />
 		</div>
 	{/if}
-	<div class="w-full mt-auto">
+	<div class="w-full">
 		{#if user}
 			<UserStatus {user} />
 		{:else}
@@ -29,3 +29,10 @@
 		{/if}
 	</div>
 </nav>
+
+<style>
+	/* top-header-height -> 64px + container-gap -> 28px = 88px */
+	nav {
+		min-height: calc(100vh - 88px)
+	}
+</style>

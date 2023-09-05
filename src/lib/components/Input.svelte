@@ -61,16 +61,16 @@
 			{/if}
 		</div>
 		<div
-			class="min-h-10 | flex | bg-zinc-800 rounded-lg overflow-hidden focus-within:(ring-2 ring-white)"
+			class="min-h-10 | flex | bg-[#202020] rounded-md overflow-hidden focus-within:(ring-2 ring-white)"
 		>
 			{#if icon}
-				<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-zinc-700">
+				<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-[#2A2A2A]">
 					<svelte:component this={icon} class="group-focus-within:stroke-white" />
 				</div>
 			{/if}
 			{#if type === "textarea"}
 				<TextArea
-					class="py-2.5 px-3"
+					class="w-full py-2.5 px-3 | bg-[#202020]"
 					{id}
 					{label}
 					{placeholder}

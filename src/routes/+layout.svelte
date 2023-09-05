@@ -7,20 +7,20 @@
 
 <style>
   :global(body) {
-    @apply h-screen bg-zinc-900 text-zinc-300 font-roboto;
+    @apply h-screen bg-background-color text-default-text-color font-poppins;
   }
 
 	:global(::-webkit-scrollbar) {
-		background-color: hsl(240, 8%, 14%);
 		width: 0.75vw;
 		min-width: 0.5rem;
+		@apply bg-bottom-color;
 	}
 
 	:global(::-webkit-scrollbar-thumb) {
-		background-color: hsl(240, 12%, 30%);
+		@apply bg-separator-vertical;
 	}
 
 	:global(::-webkit-scrollbar-thumb:hover) {
-		background-color: hsl(240, 15%, 40%);
+		@apply bg-datetime-color;
 	}
 </style>

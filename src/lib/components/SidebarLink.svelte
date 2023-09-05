@@ -7,23 +7,17 @@
 	export let text: string;
 	export let icon: typeof SvelteComponent;
 
-	$: isActive = href ? $page.url.pathname.includes(href) : false;
+	$: is_active = href ? $page.url.pathname.includes(href) : false;
 </script>
 
 <svelte:element
 	this={as}
-	class="h-6 | flex items-center gap-3 | cursor-pointer"
+	class="flex items-center gap-4 | {is_active ? "text-top-color" : "text-inactive-sidebar-link"} | cursor-pointer"
 	{href}
 	role="link"
 	tabindex="0"
 	on:click
 >
-	<svelte:component this={icon} class={isActive ? "stroke-white" : "stroke-zinc-300"} />
-	<span
-		class="{isActive ? 'text-white' : 'text-zinc-300'} hidden xl:inline"
-		class:text-lg={isActive}
-		class:font-bold={isActive}
-	>
-		{text}
-	</span>
+	<svelte:component this={icon}  />
+	<span class="text-20px font-semibold"> {text} </span>
 </svelte:element>
