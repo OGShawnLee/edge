@@ -11,6 +11,10 @@
 
 	let open = false;
 
+	function open_edit_dialog() {
+		open = true;
+	}
+
 	$: is_current_user = data.user?.id === data.found_user.id;
 	$: found_user.set(data.found_user);
 </script>
@@ -22,7 +26,10 @@
 <DialogEditProfile bind:open />
 <Header title={data.found_user.name} display_name={data.found_user.display_name}>
 	{#if is_current_user}
-		<button class="button button--zinc | px-8 rounded-full" on:click={() => (open = true)}>
+		<button
+			class="button button--border"
+			on:click={open_edit_dialog}
+		>
 			Edit Profile
 		</button>
 	{/if}

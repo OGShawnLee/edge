@@ -1,31 +1,30 @@
 <script lang="ts">
 	import Link from "./SidebarLink.svelte";
 	import UserStatus from "./SidebarUserStatus.svelte";
-	import { Home, UserCircle, Twitter } from "lucide-svelte";
-
-	export let user: JWTPayloadState | null;
+	import { Home, UserSquare } from "lucide-svelte";
+	import { user } from "$lib/state";
 </script>
 
-<nav
-	class="sticky top-0 min-h-screen min-w-62 pt-10 pr-8 pb-8 | flex flex-col items-start gap-12 | border-r-2 border-zinc-800"
->
-	<Twitter class="mx-0 stroke-white fill-white" />
-	{#if user}
-		<div class="flex flex-col items-start gap-6">
+<!-- top-header-height -> 64px + container-y-gap -> 24px = 88px -->
+<nav class="sticky h-full top-88px w-300px pt-16px pb-38px | flex flex-col justify-between">
+	{#if $user}
+		<div class="flex flex-col items-start gap-32px">
 			<Link href="/home" text="Home" icon={Home} />
-			<Link href="/{user.display_name}" text="Profile" icon={UserCircle} />
+			<Link href="/{$user.display_name}" text="Profile" icon={UserSquare} />
 		</div>
 	{/if}
-	<div class="w-full mt-auto">
-		{#if user}
-			<UserStatus {user} />
+	<div class="w-full">
+		{#if $user}
+			<UserStatus user={$user} />
 		{:else}
-			<a
-				class="min-h-10 px-8 | grid place-content-center | bg-indigo-700 rounded-md text-white font-medium black-ring-white"
-				href="/auth/sign-in"
-			>
-				Sign in
-			</a>
+			<a class="button button--top" href="/auth/sign-in"> Access Edge </a>
 		{/if}
 	</div>
 </nav>
+
+<style>
+	/* top-header-height -> 64px + container-gap -> 28px = 88px */
+	nav {
+		min-height: calc(100vh - 88px);
+	}
+</style>

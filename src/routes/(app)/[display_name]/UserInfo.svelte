@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Separator } from '$lib/components'
 	import { Calendar, MapPin } from "lucide-svelte";
 	import { found_user_context } from "$lib/context";
 
@@ -6,22 +7,23 @@
 	const found_user = found_user_context.getContext()
 </script>
 
-<div class="px-8 py-4 | grid gap-3">
+<div class="p-6 | grid gap-16px">
 	{#if $found_user.description}
-		<p>{$found_user.description}</p>
+		<p class="text-16px">{$found_user.description}</p>
 	{/if}
-	<div class="grid gap-1.5">
-		<div class="flex items-center gap-1.75">
-			<Calendar class="stroke-zinc-300" size="18" />
-			<time class="text-xs text-zinc-500" datetime={$found_user.created_at.toISOString()}>
+	<div class="grid gap-8px text-screen-name-color">
+		<div class="flex items-center gap-8px">
+			<Calendar size="18" />
+			<time class="text-12px" datetime={$found_user.created_at.toISOString()}>
 				Joined {formatter.format($found_user.created_at)}
 			</time>
 		</div>
 		{#if $found_user.location}
-			<div class="flex items-center gap-1.75">
-				<MapPin class="stroke-zinc-300" size="18" />
-				<span class="text-xs text-zinc-500"> {$found_user.location} </span>
+			<div class="flex items-center gap-8px">
+				<MapPin size="18" />
+				<span class="text-12px"> {$found_user.location} </span>
 			</div>
 		{/if}
 	</div>
 </div>
+<Separator orientation="horizontal"/>

@@ -1,7 +1,6 @@
 <script>
-  import { DialogTitle } from 'malachite-ui'
-  import { Dialog, Input } from '$lib/components'
-  import { MapPin, UserCircle, X } from 'lucide-svelte'
+  import { Dialog, DialogHeader, Input } from '$lib/components'
+  import { MapPin, UserCircle } from 'lucide-svelte'
   import { found_user_context } from '$lib/context'
 
   export let open = false
@@ -11,25 +10,8 @@
 
 <Dialog bind:open let:close>
 	<form class="grid gap-4.5" action="?/edit-profile" method="post">
-		<header class="px-8 pb-4 | flex items-center gap-4.5 | border-b-2 border-zinc-800">
-			<button
-				class="h-8 min-w-8 | bg-white rounded-full grid place-content-center hover:(bg-white/80 focus:bg-white)"
-				aria-label="Close Dialog"
-				title="Close Dialog"
-				on:click={close}
-				type="button"
-			>
-				<X class="stroke-zinc-900" size={20} />
-			</button>
-			<DialogTitle class="text-xl text-white font-medium">Edit Profile</DialogTitle>
-			<button
-				class="ml-auto px-6 min-h-8 h-8 | bg-white text-zinc-900 font-medium rounded-full hover:(bg-white/80 focus:bg-white)"
-				type="submit"
-			>
-				Save
-			</button>
-		</header>
-		<div class="grid gap-3 px-8">
+		<DialogHeader title="Editing Profile" prompt="Update Profile" {close} />
+		<div class="grid gap-3 px-6">
 			<Input
 				id="name"
 				icon={UserCircle}

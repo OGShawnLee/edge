@@ -1,24 +1,22 @@
-<div class="max-w-4xl mx-auto py-16">
-	<header class="mb-3">
-		<h1 class="text-4xl text-white">
-			Welcome to <b>Edge</b>!
-		</h1>
-	</header>
-  <p class="mb-6">
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet optio eaque vel possimus ea itaque, quas quis quisquam tenetur harum adipisci vitae consectetur ipsum, nemo veritatis odio, reiciendis voluptates perspiciatis?
-  </p>
-	<div class="flex items-center gap-3">
-		<a
-			class="min-h-10 px-8 | grid place-content-center | bg-zinc-800 rounded-md font-medium"
-			href="/auth/sign-up"
-		>
-			Sign up
-		</a>
-		<a
-			class="min-h-10 px-8 | grid place-content-center | bg-zinc-800 rounded-md font-medium"
-			href="/auth/sign-in"
-		>
-			Sign in
-		</a>
+<script>
+	import { TopHeader } from '$lib/components'
+</script>
+
+<TopHeader />
+
+<div>
+	<div class="max-w-5xl mx-auto my-auto py-16">
+		<header class="mb-9">
+			<h1 class="text-6xl text-white font-semibold">Welcome to Edge!</h1>
+		</header>
+		<p class="mb-9">
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem temporibus illum quia nobis
+			quidem doloremque quam, nesciunt unde, sunt eum, at molestiae commodi quibusdam. Reiciendis
+			similique consequatur velit voluptates accusantium.
+		</p>
+		<div class="flex items-center gap-4.5">
+			<a class="button button--border" href="/auth/sign-up"> Join Edge </a>
+			<a class="button button--border" href="/auth/sign-in"> Access Edge </a>
+		</div>
 	</div>
 </div>

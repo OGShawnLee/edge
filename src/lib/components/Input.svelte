@@ -46,58 +46,56 @@
 	}
 </script>
 
-<div class="grid gap-3">
-	<div class="group grid gap-1.25">
-		<div class="flex items-center justify-between">
-			<label class="text-zinc-100 capitalize" for={name}>{label}</label>
-			{#if isNumber(maxlength) && isNumber(minlength)}
-				<div class="text-sm font-victor">
-					<span class="font-medium {get_char_count_colour(char_count, minlength, maxlength)}">
-						{char_count}
-					</span>
-					<span> / </span>
-					<span class="font-bold"> {maxlength} </span>
-				</div>
-			{/if}
-		</div>
-		<div
-			class="min-h-10 | flex | bg-zinc-800 rounded-lg overflow-hidden focus-within:(ring-2 ring-white)"
-		>
-			{#if icon}
-				<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-zinc-700">
-					<svelte:component this={icon} class="group-focus-within:stroke-white" />
-				</div>
-			{/if}
-			{#if type === "textarea"}
-				<TextArea
-					class="py-2.5 px-3"
-					{id}
-					{label}
-					{placeholder}
-					{name}
-					{required}
-					{minlength}
-					{maxlength}
-					bind:value
-					bind:char_count
-				/>
-			{:else}
-				<input
-					class="w-full py-2.5 px-3 | bg-transparent outline-none placeholder-zinc-400 focus:text-white"
-					{type}
-					{name}
-					{id}
-					{placeholder}
-					{value}
-					{required}
-					on:input={handle_input}
-				/>
-			{/if}
-		</div>
-		{#if error?.issue}
-			<div class="flex items-center gap-1.5 | text-rose-400">
-				<span class="text-xs"> {error.issue} </span>
+<div class="group grid gap-1.25">
+	<div class="flex items-center justify-between">
+		<label class="text-top-color capitalize" for={name}>{label}</label>
+		{#if isNumber(maxlength) && isNumber(minlength)}
+			<div class="text-14px font-victor">
+				<span class="font-medium {get_char_count_colour(char_count, minlength, maxlength)}">
+					{char_count}
+				</span>
+				<span> / </span>
+				<span class="font-bold"> {maxlength} </span>
 			</div>
 		{/if}
 	</div>
+	<div
+		class="min-h-12 | flex | bg-input-color rounded-8px overflow-hidden focus-within:(ring-2 ring-white)"
+	>
+		{#if icon}
+			<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-input-icon-box-color">
+				<svelte:component this={icon} class="group-focus-within:stroke-white" />
+			</div>
+		{/if}
+		{#if type === "textarea"}
+			<TextArea
+				class="w-full py-2.5 px-4 | bg-input-color"
+				{id}
+				{label}
+				{placeholder}
+				{name}
+				{required}
+				{minlength}
+				{maxlength}
+				bind:value
+				bind:char_count
+			/>
+		{:else}
+			<input
+				class="w-full py-2.5 px-4 | bg-transparent outline-none placeholder-zinc-400 focus:text-white"
+				{type}
+				{name}
+				{id}
+				{placeholder}
+				{value}
+				{required}
+				on:input={handle_input}
+			/>
+		{/if}
+	</div>
+	{#if error?.issue}
+		<div class="flex items-center gap-1.5 | text-rose-400">
+			<span class="text-xs"> {error.issue} </span>
+		</div>
+	{/if}
 </div>

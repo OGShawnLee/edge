@@ -6,7 +6,9 @@ declare global {
 		interface Locals {
 			user: null | JWTPayloadState;
 		}
-		// interface PageData {}
+		interface PageData {
+			user: null | JWTPayloadState;
+		}
 		// interface Platform {}
 	}
 }

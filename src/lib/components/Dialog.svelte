@@ -15,18 +15,14 @@
 
 	let initialFocus: HTMLElement | undefined = undefined;
 	
-  export let open = false;
 	export { initialFocus as initial_focus };
-	export let padding = true;
-	export let small = false;
+  export let open = false;
 </script>
 
-<Dialog class="fixed inset-0 | grid place-content-center" {initialFocus} bind:open>
-	<DialogOverlay class="fixed inset-0 | bg-zinc-1000/80 backdrop-filter backdrop-blur-sm" />
+<Dialog class="fixed inset-0 z-20 | grid place-content-center" {initialFocus} bind:open>
+	<DialogOverlay class="backdrop" />
 	<DialogContent
-		class="z-10 {padding ? 'py-8' : 'py-0'} | w-sm {small
-			? 'md:w-sm'
-			: 'sm:w-lg md:w-xl'} bg-zinc-900 rounded-3xl overflow-hidden"
+		class="z-10 | w-lg pb-6 bg-dialog-color rounded-lg overflow-hidden"
 		use={[hide_scrollbar]}
 		let:close
 	>
