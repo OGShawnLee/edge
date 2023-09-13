@@ -1,22 +1,7 @@
-<script lang="ts" context="module">
-	import { isAround, isNumber } from "malachite-ui/predicate";
-
-	function get_percentage(amount: number, max: number) {
-		return (amount / max) * 100;
-	}
-
-	function get_char_count_colour(char_count: number, min: number, max: number) {
-		if (isAround(char_count, { min: 0, max: min })) return "text-rose-400";
-		const percentage = get_percentage(char_count, max);
-		if (isAround(percentage, { min: 0, max: 50 })) return "text-lime-400";
-		if (isAround(percentage, { min: 50, max: 80 })) return "text-orange-400";
-		return "text-rose-400";
-	}
-</script>
-
 <script lang="ts">
 	import type { SvelteComponent } from "svelte";
 	import type { Maybe, Nullable } from "malachite-ui/types";
+	import CharCount from "./CharCount.svelte";
 	import TextArea from "./TextArea.svelte";
 
 	export let error: Maybe<FormItemError> = undefined;
@@ -49,15 +34,7 @@
 <div class="group grid gap-1.25">
 	<div class="flex items-center justify-between">
 		<label class="text-top-color capitalize" for={name}>{label}</label>
-		{#if isNumber(maxlength) && isNumber(minlength)}
-			<div class="text-14px font-victor">
-				<span class="font-medium {get_char_count_colour(char_count, minlength, maxlength)}">
-					{char_count}
-				</span>
-				<span> / </span>
-				<span class="font-bold"> {maxlength} </span>
-			</div>
-		{/if}
+		<CharCount {char_count} {maxlength} {minlength} />
 	</div>
 	<div
 		class="min-h-12 | flex | bg-input-color rounded-8px overflow-hidden focus-within:(ring-2 ring-white)"

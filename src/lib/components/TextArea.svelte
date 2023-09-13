@@ -71,6 +71,8 @@
 	on:input={handle_expandable_area}
 	bind:value
 	bind:this={element}
+	on:click
+	on:focus
 	on:keydown
 	use:on_text_area_mount
 />

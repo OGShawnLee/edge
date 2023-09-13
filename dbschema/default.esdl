@@ -28,5 +28,18 @@ module default {
             constraint min_len_value(8);
             constraint max_len_value(256);
         };
+        link posts := .<user[is Post];
+    }
+
+    type Post {
+        required created_at: datetime {
+            readonly := true;
+            default := datetime_of_statement();
+        };
+        required user: User;
+        required text: str {
+            constraint min_len_value(1);
+            constraint max_len_value(280);
+        };
     }
 }

@@ -11,8 +11,9 @@ export default defineConfig({
     "button": "h-36px | flex items-center justify-center outline-none | rounded-lg font-medium",
     "button--square": "w-36px min-w-36px | bg-input-color focus:(ring-2 ring-white)",
     "button--border": "px-28px | bg-transparent ring-2 ring-datetime-color focus:(ring-white)",
-    "button--top": "px-28px | bg-top-color border-2 border-transparent text-background-color focus:(border-black ring-2 ring-white)"
+    "button--top": "px-28px | bg-top-color border-2 border-transparent text-background-color focus:(border-black ring-2 ring-white)",
   },
+  safelist: ["text-lime-400", "text-orange-400"],
   theme: {
     colors: {
       "default-text-color": "#DCDCDC",
