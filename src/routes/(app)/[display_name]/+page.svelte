@@ -1,7 +1,7 @@
 <script>
 	import DialogEditProfile from "./DialogEditProfile.svelte";
 	import UserInfo from "./UserInfo.svelte";
-	import { Header } from "$lib/components";
+	import { Feed, Header, Post } from "$lib/components";
 	import { found_user_context } from "$lib/context";
 	import { writable } from "svelte/store";
 
@@ -26,12 +26,12 @@
 <DialogEditProfile bind:open />
 <Header title={data.found_user.name} display_name={data.found_user.display_name}>
 	{#if is_current_user}
-		<button
-			class="button button--border"
-			on:click={open_edit_dialog}
-		>
-			Edit Profile
-		</button>
+		<button class="button button--border" on:click={open_edit_dialog}> Edit Profile </button>
 	{/if}
 </Header>
 <UserInfo />
+<Feed title="{data.found_user.display_name}'s Posts">
+	{#each data.found_user.posts as { id, created_at, text }, index (id)}
+		<Post {created_at} user={data.found_user} {text} {index} length={data.found_user.posts.length} />
+	{/each}
+</Feed>

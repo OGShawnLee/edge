@@ -7,7 +7,7 @@
 	const found_user = found_user_context.getContext()
 </script>
 
-<div class="p-6 | grid gap-16px">
+<div class="px-24px py-22px | grid gap-16px">
 	{#if $found_user.description}
 		<p class="text-16px">{$found_user.description}</p>
 	{/if}
