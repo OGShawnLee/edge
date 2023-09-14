@@ -1,5 +1,5 @@
 <script>
-	import { Separator, Sidebar, TopHeader } from "$lib/components";
+	import { Aside, Separator, Sidebar, TopHeader } from "$lib/components";
 </script>
 
 <div class="flex flex-col gap-24px">
@@ -11,6 +11,6 @@
 			<slot />
 		</main>
 		<Separator orientation="vertical" />
-		<aside class="pt-4 | flex-[300px]" />
+		<Aside />
 	</div>
 </div>
