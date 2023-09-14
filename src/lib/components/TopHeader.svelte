@@ -5,7 +5,7 @@
 	import TextArea from "./TextArea.svelte";
 	import { Sun } from "lucide-svelte";
 	import { user } from "$lib/state";
-	import { deserialize } from "$app/forms";
+	import { enhance } from "$app/forms";
 
 	let char_count = 0
 	let open = false;
@@ -15,30 +15,10 @@
 	function open_text_area() {
 		open = true;
 	}
-
-	async function handle_submit(this: HTMLFormElement) {
-		const response = await fetch(this.action, {
-			body: new FormData(this),
-			method: this.method
-		}) 
-
-		const result = deserialize(await response.text());
-		if (result.type === "success") {
-			open = false;
-			post = ""
-			alert("Post has been publised!")
-		};
-	}
 </script>
 
-<!-- central-content-layout-x-gap -> 32px -->
-<!-- central-content-x-marging -> 24px -->
-<!-- sidebar-length = 300px -->
-<!-- logo-length = layout-x-gap + central-content-x-marging = 356px -->
-<!-- we use that length to push the text-area to the middle of the page x-axis  -->
-
 <Dialog bind:open {initial_focus} let:close>
-	<form class="grid gap-4.5" action="/home?/post" method="post" on:submit|preventDefault={handle_submit}>
+	<form class="grid gap-4.5" action="/home?/post" method="post" use:enhance>
 		<DialogHeader title="Creating Post" prompt="Post" {close} >
 			<CharCount {char_count} maxlength={280} minlength={1} />
 		</DialogHeader>
@@ -55,6 +35,12 @@
 	</form>
 </Dialog>
 
+<!-- central-content-layout-x-gap -> 32px -->
+<!-- central-content-x-marging -> 24px -->
+<!-- sidebar-length = 300px -->
+<!-- logo-length = layout-x-gap + central-content-x-marging = 356px -->
+<!-- we use that length to push the text-area to the middle of the page x-axis  -->
+
 <div class="sticky top-0 z-10 h-64px | bg-black">
 	<div class="max-w-6xl w-full h-full mx-auto | flex items-center gap-32px">
 		<!-- logo-length applied here as min-w-300px -->
@@ -70,12 +56,6 @@
 			>
 				What is happening?
 			</button>
-			<!-- <TextArea
-				class="absolute-center w-504px px-16px | bg-background-color rounded-md"
-				id="post"
-				placeholder="What is happening?"
-				on:focus={open_text_area}
-			/> -->
 		{/if}
 		<button class="ml-auto | bg-transparent" title="Change Color Theme">
 			<Sun />
