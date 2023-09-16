@@ -9,7 +9,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --plugin-search-dir . --write .",
-		"codegen": "npx @edgedb/generate edgeql-js"
+		"codegen": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces"
 	},
 	"devDependencies": {
 		"@edgedb/generate": "^0.3.3",

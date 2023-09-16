@@ -31,7 +31,7 @@
 </Header>
 <UserInfo />
 <Feed title="{data.found_user.display_name}'s Posts">
-	{#each data.found_user.posts as { id, created_at, text }, index (id)}
-		<Post {created_at} user={data.found_user} {text} {index} length={data.found_user.posts.length} />
+	{#each data.found_user.posts as post, index (post.id)}
+		<Post {post} user={data.found_user} {index} length={data.found_user.posts.length} />
 	{/each}
 </Feed>

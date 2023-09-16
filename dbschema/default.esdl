@@ -31,6 +31,29 @@ module default {
         link posts := .<user[is Post];
     }
 
+    type Bookmark {
+        required bookmarked_at: datetime {
+            readonly := true;
+            default := datetime_of_statement();
+        };
+        required user: User;
+        required post: Post;
+
+        trigger bookmark_insert after insert for each do (
+            update Post 
+            filter .id = __new__.post.id
+            set { count_bookmark := .count_bookmark + 1 }
+        );
+
+        trigger bookmark_delete after delete for each do (
+            update Post 
+            filter .id = __old__.post.id
+            set { count_bookmark := .count_bookmark - 1 }
+        );
+
+        constraint exclusive on ((.user, .post));
+    }
+
     type Post {
         required created_at: datetime {
             readonly := true;
@@ -40,6 +63,10 @@ module default {
         required text: str {
             constraint min_len_value(1);
             constraint max_len_value(280);
+        };
+        required count_bookmark: int16 {
+            default := 0;
+            constraint min_value(0);
         };
     }
 }

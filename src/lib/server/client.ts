@@ -1,10 +1,17 @@
-import type { Client } from 'edgedb'
-import { createClient } from 'edge/edgeql-js'
+import type { Client } from "edgedb";
+import e, { createClient } from "edge/edgeql-js";
 
 let client_instance: Client | undefined;
 
 export function get_client() {
-  if (client_instance) return client_instance
-  return client_instance = createClient()
+	if (client_instance) return client_instance;
+	return (client_instance = createClient());
 }
 
+export const post_shape = e.shape(e.Post, () => ({
+	id: true,
+	created_at: true,
+	user: { id: true, display_name: true, name: true },
+	text: true,
+	count_bookmark: true
+}));

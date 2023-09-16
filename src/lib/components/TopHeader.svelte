@@ -44,9 +44,9 @@
 <div class="sticky top-0 z-10 h-64px | bg-black">
 	<div class="max-w-6xl w-full h-full mx-auto | flex items-center gap-32px">
 		<!-- logo-length applied here as min-w-300px -->
-		<span class="min-w-356px | uppercase text-top-color text-24px font-bold tracking-1">
+		<a class="min-w-356px | uppercase text-top-color text-24px font-bold tracking-1" href="/">
 			Edge | X
-		</span>
+		</a>
 		{#if $user}
 			<button
 				class="absolute-center | w-504px px-16px py-2.5 | bg-background-color text-datetime-color text-left rounded-md black-ring-white"

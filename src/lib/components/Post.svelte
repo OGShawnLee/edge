@@ -37,28 +37,68 @@
 </script>
 
 <script lang="ts">
-	import type { Post, User } from "edge/interfaces";
+	import type { Post, User } from "@types";
+	import Button from "./Button.svelte";
 	import Separator from "./Separator.svelte";
+	import { Bookmark } from "lucide-svelte";
+	import { deserialize } from "$app/forms";
+	import { bookmark_route_context } from "$lib/context";
 
-	export let created_at: Post["created_at"];
 	export let index: number;
 	export let length: number;
-	export let text: Post["text"];
-	export let user: Pick<User, "display_name" | "id" | "name">;
+	export let post: Post;
+	export let user: User;
+
+	$: count_bookmark = post.count_bookmark;
+
+	const on_bookmark_deleted = bookmark_route_context.getContext(false)
+
+	async function handle_bookmark(this: HTMLFormElement) {
+		const response = await fetch(this.action, {
+			body: new FormData(this),
+			method: this.method
+		});
+		const result = deserialize(await response.text());
+
+		if (result.type !== "success") return;
+
+		if (result.data?.operation === "deleted") {
+			count_bookmark--;
+			on_bookmark_deleted?.(post.id);
+		} else {
+			count_bookmark++;
+		}
+	}
 </script>
 
 <article class="grid gap-22px">
-	<div class="px-6 | grid gap-2">
-		<header class="w-full | flex items-baseline">
+	<div class="px-24px">
+		<header class="w-full mb-8px | flex items-baseline">
 			<p class="text-top-color font-medium">{user.name}</p>
 			<a class="ml-12px | text-14px text-screen-name-color" href="/{user.display_name}">
 				@{user.display_name}
 			</a>
-			<time class="ml-36px | text-12px text-datetime-color" datetime={created_at.toISOString()}>
-				{get_relative_time(created_at)}
+			<time
+				class="ml-36px | text-12px text-datetime-color"
+				datetime={post.created_at.toISOString()}
+			>
+				{get_relative_time(post.created_at)}
 			</time>
 		</header>
-		<h3>{text}</h3>
+		<h3 class="mb-16px">{post.text}</h3>
+		<div class="flex items-center gap-76px">
+			<form action="/home?/bookmark" method="post" on:submit|preventDefault={handle_bookmark}>
+				<input type="hidden" name="id" value={post.id} />
+				<Button
+					class="flex items-center gap-1.25 | bg-transparent text-datetime-color"
+					title="Bookmark or Unbookmark Post"
+					type="submit"
+				>
+					<Bookmark />
+					{count_bookmark}
+				</Button>
+			</form>
+		</div>
 	</div>
 	{#if index != length - 1}
 		<Separator orientation="horizontal" />

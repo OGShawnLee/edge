@@ -1,6 +1,6 @@
 import type { Input, Issues } from "valibot";
 import e from "edge/edgeql-js";
-import { set_auth_cookie } from '$lib/server/auth'
+import { set_auth_cookie } from "$lib/server/auth";
 import { use_await, use_catch } from "$lib/hooks";
 import { get_client } from "$lib/server/client";
 import { error, fail } from "@sveltejs/kit";
@@ -44,7 +44,7 @@ export const actions = {
 				name: { issue: issues.name?.[0], value: name as string }
 			});
 		}
-		
+
 		const updated_user = await update_user(locals.user.id, user.data);
 		if (updated_user.failed) {
 			return fail(500, {
@@ -56,14 +56,14 @@ export const actions = {
 		}
 
 		if (isNullish(updated_user.data)) {
-			throw error(404, { message: "User to be updated does not exist." })
+			throw error(404, { message: "User to be updated does not exist." });
 		}
 
 		set_auth_cookie(cookies, {
 			id: locals.user.id,
 			display_name: locals.user.display_name,
-			name: user.data.name,
-		})
+			name: user.data.name
+		});
 	}
 };
 
@@ -78,7 +78,16 @@ function get_user_by_display_name(display_name: string) {
 				name: true,
 				description: true,
 				location: true,
-				posts: { id: true, created_at: true, text: true },
+				posts: (post) => ({
+					id: true,
+					created_at: true,
+					text: true,
+					count_bookmark: true,
+					order_by: {
+						expression: post.created_at,
+						direction: e.DESC
+					}
+				}),
 				filter_single: { display_name }
 			}))
 			.run(client);

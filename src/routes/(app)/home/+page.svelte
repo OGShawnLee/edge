@@ -10,7 +10,7 @@
 
 <Header title="Home" />
 <Feed>
-	{#each data.feed as { id, created_at, text, user }, index (id)}
-		<Post {created_at} {user} {text} {index} length={data.feed.length} />
+	{#each data.feed as post, index (post.id)}
+		<Post {post} user={post.user} {index} length={data.feed.length} />
 	{/each}
 </Feed>
