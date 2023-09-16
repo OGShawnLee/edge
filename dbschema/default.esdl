@@ -1,4 +1,11 @@
 module default {
+    abstract type Record {
+        required created_at: datetime {
+            readonly := true;
+            default := datetime_of_statement();
+        };
+    }
+
     type User {
         required created_at: datetime {
             readonly := true;
@@ -54,6 +61,25 @@ module default {
         constraint exclusive on ((.user, .post));
     }
 
+    type Favourite extending Record {
+        required post: Post;
+        required user: User;
+
+        trigger favourite_insert after insert for each do (   
+            update Post 
+            filter .id = __new__.post.id
+            set { count_favourite := .count_favourite + 1 }
+        );
+
+        trigger favourite_delete after delete for each do (
+            update Post 
+            filter .id = __old__.post.id
+            set { count_favourite := .count_favourite - 1 }
+        );
+
+        constraint exclusive on ((.user, .post));
+    }
+
     type Post {
         required created_at: datetime {
             readonly := true;
@@ -65,6 +91,10 @@ module default {
             constraint max_len_value(280);
         };
         required count_bookmark: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
+        required count_favourite: int16 {
             default := 0;
             constraint min_value(0);
         };

@@ -83,6 +83,7 @@ function get_user_by_display_name(display_name: string) {
 					created_at: true,
 					text: true,
 					count_bookmark: true,
+					count_favourite: true,
 					order_by: {
 						expression: post.created_at,
 						direction: e.DESC

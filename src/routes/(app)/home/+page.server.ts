@@ -1,4 +1,3 @@
-import type { Client } from "edgedb";
 import e from "edge/edgeql-js";
 import { fetch_feed } from "$lib/server/feed";
 import { use_await, use_catch } from "$lib/hooks";
@@ -31,13 +30,32 @@ export const actions = {
 		const id = data.get("id");
 
 		if (typeof id !== "string") return fail(400);
-
+	
 		const result = await handle_bookmark(event.locals.user.id, id);
 		if (result.failed) {
 			throw error(500, { message: "Unable to create or delete bookmark." })
 		}
 
 		return { operation: result.data };
+	},
+	favourite: async event => {
+		if (isNullish(event.locals.user)) {
+			throw redirect(303, "/auth/sign-in");
+		}
+		
+		const data = await event.request.formData();
+		const id = data.get("id");
+		
+		if (typeof id !== "string") return fail(400);
+		
+		const controller = new FavouriteController(id, event.locals.user.id)
+		const result = await controller.handle_favourite()
+		
+		if (result.failed) {
+			throw error(500, { message: "Unable to create or delete favourite." })
+		}
+
+		return { operation: result.data }
 	},
 	post: async (event) => {
 		if (isNullish(event.locals.user)) {
@@ -73,6 +91,7 @@ function create_post(user_id: string, post: string) {
 			.run(client);
 	});
 }
+
 function delete_bookmark(user_id: string, post_id: string) {
 	return e.delete(e.Bookmark, () => ({
 		filter_single: {
@@ -96,6 +115,52 @@ function handle_bookmark(user_id: string, post_id: string) {
 			return "created"
 		}
 	});
+}
+
+class FavouriteController {
+	readonly client = get_client();
+
+	constructor(
+		readonly post_id: string, 
+		readonly user_id: string,
+	) {}
+
+	private get_favourite(this: FavouriteController) {
+		return e.select(e.Favourite, () => ({
+			id: true,
+			filter_single: {
+				user: e.select(e.User, () => ({ filter_single: { id: this.user_id } })),
+				post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } }))
+			}
+		})).run(this.client);
+	}
+
+	private create_favourite(this: FavouriteController) {
+		return e.insert(e.Favourite, {
+			user: e.select(e.User, () => ({ filter_single: { id: this.user_id } })),
+			post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } }))
+		}).run(this.client);
+	}
+
+	private delete_favourite(this: FavouriteController, id: string) {
+		return e.delete(e.Favourite, () => ({
+			filter_single: { id }
+		})).run(this.client);
+	}
+
+	handle_favourite(this: FavouriteController) {
+		return use_await(async () => {
+			// ? we doing two round database trips -> slow! 
+			const favourite = await this.get_favourite();
+			if (favourite) {
+				const deletion = await this.delete_favourite(favourite.id);
+				return deletion ? "deleted" : "not-found"
+			} else {
+				await this.create_favourite();
+				return "created"
+			}
+		});
+	}
 }
 
 function get_bookmark(user_id: string, post_id: string) {

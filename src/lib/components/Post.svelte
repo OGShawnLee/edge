@@ -38,10 +38,9 @@
 
 <script lang="ts">
 	import type { Post, User } from "@types";
-	import Button from "./Button.svelte";
 	import Separator from "./Separator.svelte";
-	import { Bookmark } from "lucide-svelte";
-	import { deserialize } from "$app/forms";
+	import PostButton from "./PostButton.svelte";
+	import { Bookmark, Heart } from "lucide-svelte";
 	import { bookmark_route_context } from "$lib/context";
 
 	export let index: number;
@@ -49,26 +48,7 @@
 	export let post: Post;
 	export let user: User;
 
-	$: count_bookmark = post.count_bookmark;
-
-	const on_bookmark_deleted = bookmark_route_context.getContext(false)
-
-	async function handle_bookmark(this: HTMLFormElement) {
-		const response = await fetch(this.action, {
-			body: new FormData(this),
-			method: this.method
-		});
-		const result = deserialize(await response.text());
-
-		if (result.type !== "success") return;
-
-		if (result.data?.operation === "deleted") {
-			count_bookmark--;
-			on_bookmark_deleted?.(post.id);
-		} else {
-			count_bookmark++;
-		}
-	}
+	const on_bookmark_deleted = bookmark_route_context.getContext(false);
 </script>
 
 <article class="grid gap-22px">
@@ -87,17 +67,21 @@
 		</header>
 		<h3 class="mb-16px">{post.text}</h3>
 		<div class="flex items-center gap-76px">
-			<form action="/home?/bookmark" method="post" on:submit|preventDefault={handle_bookmark}>
-				<input type="hidden" name="id" value={post.id} />
-				<Button
-					class="flex items-center gap-1.25 | bg-transparent text-datetime-color"
-					title="Bookmark or Unbookmark Post"
-					type="submit"
-				>
-					<Bookmark />
-					{count_bookmark}
-				</Button>
-			</form>
+			<PostButton
+				action="/home?/bookmark"
+				title="Bookmark or Unbookmark"
+				icon={Bookmark}
+				id={post.id}
+				count={post.count_bookmark}
+				on:delete={event => on_bookmark_deleted?.(event.detail)}
+			/>
+			<PostButton
+				action="/home?/favourite"
+				title="Like or Unlike Post"
+				icon={Heart}
+				id={post.id}
+				count={post.count_favourite}
+			/>
 		</div>
 	</div>
 	{#if index != length - 1}
