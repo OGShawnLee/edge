@@ -31,7 +31,8 @@ export const actions = {
 
 		if (typeof id !== "string") return fail(400);
 	
-		const result = await handle_bookmark(event.locals.user.id, id);
+		const controller = new Record(e.Bookmark, id, event.locals.user.id)
+		const result = await controller.toggle_record();
 		if (result.failed) {
 			throw error(500, { message: "Unable to create or delete bookmark." })
 		}
@@ -48,8 +49,8 @@ export const actions = {
 		
 		if (typeof id !== "string") return fail(400);
 		
-		const controller = new FavouriteController(id, event.locals.user.id)
-		const result = await controller.handle_favourite()
+		const controller = new Record(e.Bookmark, id, event.locals.user.id)
+		const result = await controller.toggle_record()
 		
 		if (result.failed) {
 			throw error(500, { message: "Unable to create or delete favourite." })
@@ -73,13 +74,6 @@ export const actions = {
 	}
 };
 
-function create_bookmark(user_id: string, post_id: string) {
-	return e.insert(e.Bookmark, {
-		user: e.select(e.User, () => ({ filter_single: { id: user_id } })),
-		post: e.select(e.Post, () => ({ filter_single: { id: post_id } }))
-	});
-}
-
 function create_post(user_id: string, post: string) {
 	const client = get_client();
 	return use_await(() => {
@@ -92,83 +86,50 @@ function create_post(user_id: string, post: string) {
 	});
 }
 
-function delete_bookmark(user_id: string, post_id: string) {
-	return e.delete(e.Bookmark, () => ({
-		filter_single: {
-			user: e.select(e.User, () => ({ filter_single: { id: user_id } })),
-			post: e.select(e.Post, () => ({ filter_single: { id: post_id } }))
-		}
-	}));
-}
-
-// i tried defining a edgeql function but failed
-function handle_bookmark(user_id: string, post_id: string) {
-	const client = get_client();
-	return use_await(async () => {
-		// ? we doing two round database trips -> slow! 
-		const bookmark = await get_bookmark(user_id, post_id).run(client);
-		if (bookmark) {
-			const deletion = await delete_bookmark(user_id, post_id).run(client);
-			return deletion ? "deleted" : "not-found"
-		} else {
-			await create_bookmark(user_id, post_id).run(client);
-			return "created"
-		}
-	});
-}
-
-class FavouriteController {
+class Record {
 	readonly client = get_client();
 
 	constructor(
+		readonly element: typeof e.Bookmark | typeof e.Favourite,
 		readonly post_id: string, 
 		readonly user_id: string,
 	) {}
 
-	private get_favourite(this: FavouriteController) {
-		return e.select(e.Favourite, () => ({
+	private get_record(this: Record) {
+		return e.select(this.element, () => ({
 			id: true,
 			filter_single: {
-				user: e.select(e.User, () => ({ filter_single: { id: this.user_id } })),
-				post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } }))
+				post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } })),
+				user: e.select(e.User, () => ({ filter_single: { id: this.user_id } }))
 			}
 		})).run(this.client);
 	}
 
-	private create_favourite(this: FavouriteController) {
-		return e.insert(e.Favourite, {
+	private create_record(this: Record) {
+		return e.insert(this.element, {
 			user: e.select(e.User, () => ({ filter_single: { id: this.user_id } })),
 			post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } }))
 		}).run(this.client);
 	}
-
-	private delete_favourite(this: FavouriteController, id: string) {
-		return e.delete(e.Favourite, () => ({
+	
+	private delete_record(this: Record, id: string) {
+		return e.delete(this.element, () => ({
 			filter_single: { id }
 		})).run(this.client);
 	}
 
-	handle_favourite(this: FavouriteController) {
+	// tried defining an edgedb fn but they are pure functions...
+	toggle_record(this: Record) {
 		return use_await(async () => {
-			// ? we doing two round database trips -> slow! 
-			const favourite = await this.get_favourite();
-			if (favourite) {
-				const deletion = await this.delete_favourite(favourite.id);
+			// ? we are doing two round database trips which is slow 
+			const record = await this.get_record();
+			if (record) {
+				const deletion = await this.delete_record(record.id);
 				return deletion ? "deleted" : "not-found"
 			} else {
-				await this.create_favourite();
+				await this.create_record();
 				return "created"
 			}
 		});
 	}
-}
-
-function get_bookmark(user_id: string, post_id: string) {
-	return e.select(e.Bookmark, () => ({
-		id: true,
-		filter_single: {
-			user: e.select(e.User, () => ({ filter_single: { id: user_id } })),
-			post: e.select(e.Post, () => ({ filter_single: { id: post_id } }))
-		}
-	}));
 }
