@@ -65,6 +65,8 @@ module default {
         required post: Post;
         required user: User;
 
+        # canont do a second statement for updating user count_favourite...
+
         trigger favourite_insert after insert for each do (   
             update Post 
             filter .id = __new__.post.id
@@ -77,7 +79,31 @@ module default {
             set { count_favourite := .count_favourite - 1 }
         );
 
+        # cannot ensure receiver is not the sender...
+        # trigger send_notification after insert for each do (
+        #     insert Notification {
+        #         sender := __new__.user,
+        #         receiver := __new__.post.user,
+        #         post := __new__.post,
+        #         event := <Event>"favourite"
+        #     }
+        # );
+
         constraint exclusive on ((.user, .post));
+    }
+
+    scalar type Event extending enum<"favourite">;
+
+    type Notification extending Record {
+        required sender: User;
+        required receiver: User;
+        required post: Post;
+        required event: Event;
+        required has_been_seen: bool {
+            default := false
+        };
+
+        constraint expression on (__subject__.sender != __subject__.receiver);
     }
 
     type Post {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Link from "./SidebarLink.svelte";
 	import UserStatus from "./SidebarUserStatus.svelte";
-	import { Bookmark, Home, UserSquare } from "lucide-svelte";
+	import { Bell, Bookmark, Home, UserSquare } from "lucide-svelte";
 	import { user } from "$lib/state";
 </script>
 
@@ -10,6 +10,7 @@
 	{#if $user}
 		<div class="flex flex-col items-start gap-32px">
 			<Link href="/home" text="Home" icon={Home} />
+			<Link href="/i/notifications" text="Notifications" icon={Bell} />
 			<Link href="/{$user.display_name}" text="Profile" icon={UserSquare} />
 			<Link href="/i/bookmarks" text="Bookmarks" icon={Bookmark} />
 		</div>

@@ -1,3 +1,4 @@
+import type { RequestEvent } from "@sveltejs/kit";
 import e from "edge/edgeql-js";
 import { fetch_feed } from "$lib/server/feed";
 import { use_await, use_catch } from "$lib/hooks";
@@ -30,33 +31,33 @@ export const actions = {
 		const id = data.get("id");
 
 		if (typeof id !== "string") return fail(400);
-	
-		const controller = new Record(e.Bookmark, id, event.locals.user.id)
+
+		const controller = new Record(e.Bookmark, id, event.locals.user.id);
 		const result = await controller.toggle_record();
 		if (result.failed) {
-			throw error(500, { message: "Unable to create or delete bookmark." })
+			throw error(500, { message: "Unable to create or delete bookmark." });
 		}
 
 		return { operation: result.data };
 	},
-	favourite: async event => {
+	favourite: async (event) => {
 		if (isNullish(event.locals.user)) {
 			throw redirect(303, "/auth/sign-in");
 		}
-		
+
 		const data = await event.request.formData();
 		const id = data.get("id");
-		
+
 		if (typeof id !== "string") return fail(400);
-		
-		const controller = new Record(e.Bookmark, id, event.locals.user.id)
-		const result = await controller.toggle_record()
-		
+
+		const controller = new Record(e.Favourite, id, event.locals.user.id);
+		const result = await controller.toggle_record(event);
+
 		if (result.failed) {
-			throw error(500, { message: "Unable to create or delete favourite." })
+			throw error(500, { message: "Unable to create or delete favourite." });
 		}
 
-		return { operation: result.data }
+		return { operation: result.data };
 	},
 	post: async (event) => {
 		if (isNullish(event.locals.user)) {
@@ -91,45 +92,70 @@ class Record {
 
 	constructor(
 		readonly element: typeof e.Bookmark | typeof e.Favourite,
-		readonly post_id: string, 
-		readonly user_id: string,
+		readonly post_id: string,
+		readonly user_id: string
 	) {}
 
 	private get_record(this: Record) {
-		return e.select(this.element, () => ({
-			id: true,
-			filter_single: {
-				post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } })),
-				user: e.select(e.User, () => ({ filter_single: { id: this.user_id } }))
-			}
-		})).run(this.client);
+		return e
+			.select(this.element, () => ({
+				id: true,
+				filter_single: {
+					post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } })),
+					user: e.select(e.User, () => ({ filter_single: { id: this.user_id } }))
+				}
+			}))
+			.run(this.client);
 	}
 
 	private create_record(this: Record) {
-		return e.insert(this.element, {
+		const record = e.insert(this.element, {
 			user: e.select(e.User, () => ({ filter_single: { id: this.user_id } })),
 			post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } }))
-		}).run(this.client);
+		});
+
+		return e
+			.select(record, () => ({
+				id: true,
+				post: { user: { id: true } }
+			}))
+			.run(this.client);
 	}
-	
+
 	private delete_record(this: Record, id: string) {
-		return e.delete(this.element, () => ({
-			filter_single: { id }
-		})).run(this.client);
+		return e
+			.delete(this.element, () => ({
+				filter_single: { id }
+			}))
+			.run(this.client);
 	}
 
 	// tried defining an edgedb fn but they are pure functions...
-	toggle_record(this: Record) {
+	toggle_record(this: Record, event?: RequestEvent) {
 		return use_await(async () => {
-			// ? we are doing two round database trips which is slow 
+			// ? we are doing two round database trips which is slow
 			const record = await this.get_record();
 			if (record) {
 				const deletion = await this.delete_record(record.id);
-				return deletion ? "deleted" : "not-found"
+				return deletion ? "deleted" : "not-found";
 			} else {
-				await this.create_record();
-				return "created"
+				const record = await this.create_record();
+				this.trigger_notification(record.post.user.id, event);
+				return "created";
 			}
+		});
+	}
+
+	private trigger_notification(
+		this: Record,
+		receiver_id: string,
+		event?: RequestEvent
+	) {
+		if (this.element === e.Bookmark || this.user_id === receiver_id) return;
+		if (isNullish(event)) throw "event must be provided to trigger notification event!";
+		event.fetch("/api/notification", {
+			method: "POST",
+			body: JSON.stringify({ post_id: this.post_id, sender_id: this.user_id, receiver_id })
 		});
 	}
 }
