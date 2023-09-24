@@ -16,3 +16,9 @@ export const post_shape = e.shape(e.Post, () => ({
 	count_bookmark: true,
 	count_favourite: true
 }));
+
+export const user_shape = e.shape(e.User, () => ({
+	id: true,
+	name: true,
+	display_name: true
+}));

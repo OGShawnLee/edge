@@ -1,37 +1,11 @@
 <script>
-	import DialogEditProfile from "./DialogEditProfile.svelte";
-	import UserInfo from "./UserInfo.svelte";
-	import { Feed, Header, Post } from "$lib/components";
-	import { found_user_context } from "$lib/context";
-	import { writable } from "svelte/store";
+	import { Feed, Post } from "$lib/components";
 
 	export let data;
-
-	const found_user = found_user_context.setContext(writable(data.found_user));
-
-	let open = false;
-
-	function open_edit_dialog() {
-		open = true;
-	}
-
-	$: is_current_user = data.user?.id === data.found_user.id;
-	$: found_user.set(data.found_user);
 </script>
 
-<svelte:head>
-	<title>{data.found_user.name} @({data.found_user.display_name}) - Edge</title>
-</svelte:head>
-
-<DialogEditProfile bind:open />
-<Header title={data.found_user.name} display_name={data.found_user.display_name}>
-	{#if is_current_user}
-		<button class="button button--border" on:click={open_edit_dialog}> Edit Profile </button>
-	{/if}
-</Header>
-<UserInfo />
 <Feed title="{data.found_user.display_name}'s Posts">
-	{#each data.found_user.posts as post, index (post.id)}
-		<Post {post} user={data.found_user} {index} length={data.found_user.posts.length} />
+	{#each data.posts as post, index (post.id)}
+		<Post {post} user={data.found_user} {index} length={data.posts.length} />
 	{/each}
 </Feed>

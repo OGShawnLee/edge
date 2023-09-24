@@ -9,17 +9,17 @@ import { flatten, parse, pick } from "valibot";
 import { user_schema } from "$lib/valibot";
 
 export async function load(event) {
-	const found_user = await get_user_by_display_name(event.params.display_name);
+	const posts = await fetch_user_posts_by_display_name(event.params.display_name);
 
-	if (found_user.failed) {
+	if (posts.failed) {
 		throw error(500, { message: "Unable to find user." });
 	}
 
-	if (isNullish(found_user.data)) {
+	if (isNullish(posts.data)) {
 		throw error(404, { message: "User does not exist." });
 	}
 
-	return { found_user: found_user.data };
+	return { posts: posts.data };
 }
 
 const edit_schema = pick(user_schema, ["name", "description", "location"]);
@@ -67,29 +67,21 @@ export const actions = {
 	}
 };
 
-function get_user_by_display_name(display_name: string) {
+function fetch_user_posts_by_display_name(display_name: string) {
 	const client = get_client();
 	return use_await(() => {
 		return e
-			.select(e.User, () => ({
+			.select(e.Post, (post) => ({
 				id: true,
 				created_at: true,
-				display_name: true,
-				name: true,
-				description: true,
-				location: true,
-				posts: (post) => ({
-					id: true,
-					created_at: true,
-					text: true,
-					count_bookmark: true,
-					count_favourite: true,
-					order_by: {
-						expression: post.created_at,
-						direction: e.DESC
-					}
-				}),
-				filter_single: { display_name }
+				text: true,
+				count_bookmark: true,
+				count_favourite: true,
+				order_by: {
+					expression: post.created_at,
+					direction: e.DESC
+				},
+				filter: e.op(post.user.display_name, "=", display_name)
 			}))
 			.run(client);
 	});
