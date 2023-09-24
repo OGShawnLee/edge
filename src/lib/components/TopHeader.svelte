@@ -44,7 +44,7 @@
 <div class="sticky top-0 z-10 h-64px | bg-black">
 	<div class="max-w-6xl w-full h-full mx-auto | flex items-center gap-32px">
 		<!-- logo-length applied here as min-w-300px -->
-		<a class="min-w-356px | uppercase text-top-color text-24px font-bold tracking-1" href="/">
+		<a class="uppercase text-top-color text-24px font-bold tracking-1" href="/">
 			Edge | X
 		</a>
 		{#if $user}
