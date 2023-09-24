@@ -126,7 +126,12 @@ module default {
             default := 0;
             constraint min_value(0);
         };
-        property is_favourite := (
+        property is_bookmarked := (
+            select exists (
+                select Bookmark filter .user.id = global current_user_id and .post.id = Post.id
+            )
+        );
+        property is_favourited := (
             select exists (
                 select Favourite filter .user.id = global current_user_id and .post.id = Post.id
             )

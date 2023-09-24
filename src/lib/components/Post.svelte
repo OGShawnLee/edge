@@ -29,6 +29,7 @@
 				action="/home?/bookmark"
 				title="Bookmark or Unbookmark"
 				icon={Bookmark}
+				is_active_icon={post.is_bookmarked}
 				id={post.id}
 				count={post.count_bookmark}
 				on:delete={(event) => on_bookmark_deleted?.(event.detail)}
@@ -38,7 +39,7 @@
 				active_color="text-rose-500"
 				title="Like or Unlike Post"
 				icon={Heart}
-				is_active_icon={post.is_favourite}
+				is_active_icon={post.is_favourited}
 				id={post.id}
 				count={post.count_favourite}
 			/>
