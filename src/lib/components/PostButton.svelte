@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Button from "./Button.svelte";
+	import type { Maybe } from "malachite-ui/types";
 	import type { SvelteComponent } from "svelte";
 	import { createEventDispatcher } from "svelte";
 	import { deserialize } from "$app/forms";
+	import { isNumber } from "malachite-ui/predicate";
 
 	export let action: string;
-	export let count: number;
+	export let count: Maybe<number> = undefined;
 	export let icon: typeof SvelteComponent;
 	export let id: string;
 	export let is_active_icon = false;
@@ -23,11 +25,11 @@
 		if (result.type !== "success") return;
 
 		if (result.data?.operation === "deleted") {
-			count--;
+			if (isNumber(count)) count--;
 			dispatch("delete", id);
 			is_active_icon = false;
 		} else if (result.data?.operation === "created") {
-			count++;
+			if (isNumber(count)) count++;
 			is_active_icon = true;
 		}
 	}
@@ -43,6 +45,8 @@
 		type="submit"
 	>
 		<svelte:component this={icon} />
-		{count}
+		{#if isNumber(count)}
+			{count}
+		{/if}
 	</Button>
 </form>

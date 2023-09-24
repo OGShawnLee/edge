@@ -3,7 +3,7 @@
 	import Separator from "./Separator.svelte";
 	import PostButton from "./PostButton.svelte";
 	import Time from "./Time.svelte";
-	import { Bookmark, Heart } from "lucide-svelte";
+	import { Bookmark, Heart, Sparkles } from "lucide-svelte";
 	import { bookmark_route_context } from "$lib/context";
 
 	export let index: number;
@@ -42,6 +42,13 @@
 				is_active_icon={post.is_favourited}
 				id={post.id}
 				count={post.count_favourite}
+			/>
+			<PostButton
+				action="/home?/highlight"
+				title="Highlight or Unhighlight Post"
+				icon={Sparkles}
+				is_active_icon={post.is_highlighted}
+				id={post.id}
 			/>
 		</div>
 	</div>

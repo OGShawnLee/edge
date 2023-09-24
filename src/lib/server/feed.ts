@@ -15,6 +15,7 @@ export function fetch_feed(current_user_id?: string) {
 				count_favourite: true,
 				is_bookmarked: true,
 				is_favourited: true,
+				is_highlighted: true,
 				order_by: {
 					expression: post.created_at,
 					direction: e.DESC

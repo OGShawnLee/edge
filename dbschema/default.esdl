@@ -94,6 +94,13 @@ module default {
         constraint exclusive on ((.user, .post));
     }
 
+    type Highlight extending Record {
+        required user: User;
+        required post: Post;
+
+        constraint exclusive on ((.user, .post));
+    }
+
     scalar type Event extending enum<"favourite">;
 
     type Notification extending Record {
@@ -134,6 +141,11 @@ module default {
         property is_favourited := (
             select exists (
                 select Favourite filter .user.id = global current_user_id and .post.id = Post.id
+            )
+        );
+        property is_highlighted := (
+            select exists (
+                select Highlight filter .user.id = global current_user_id and .post.id = Post.id
             )
         );
     }

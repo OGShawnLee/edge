@@ -72,6 +72,25 @@ export const actions = {
 
 		const post = await create_post(event.locals.user.id, text_result.data);
 		if (post.failed) return fail(500);
+	},
+	highlight: async (event) => {
+		if (isNullish(event.locals.user)) {
+			throw redirect(303, "/auth/sign-in");
+		}
+
+		const data = await event.request.formData();
+		const id = data.get("id");
+
+		if (typeof id !== "string") return fail(400);
+		
+		const controller = new Record(e.Highlight, id, event.locals.user.id);
+		const result = await controller.toggle_record(event);
+
+		if (result.failed) {
+			throw error(500, { message: "Unable to create or delete highlight." });
+		}
+
+		return { operation: result.data };
 	}
 };
 
@@ -91,7 +110,7 @@ class Record {
 	readonly client = get_client();
 
 	constructor(
-		readonly element: typeof e.Bookmark | typeof e.Favourite,
+		readonly element: typeof e.Bookmark | typeof e.Favourite | typeof e.Highlight,
 		readonly post_id: string,
 		readonly user_id: string
 	) {}

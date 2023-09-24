@@ -82,6 +82,7 @@ function fetch_user_posts_by_display_name(display_name: string, current_user_id?
 				count_favourite: true,
 				is_bookmarked: true,
 				is_favourited: true,
+				is_highlighted: true,
 				order_by: {
 					expression: post.created_at,
 					direction: e.DESC
