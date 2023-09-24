@@ -29,6 +29,7 @@ function get_user_by_display_name(display_name: string) {
 				name: true,
 				description: true,
 				location: true,
+				count_highlight: true,
 				filter_single: { display_name }
 			}))
 			.run(client);

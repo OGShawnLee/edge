@@ -37,6 +37,10 @@ module default {
             constraint min_len_value(8);
             constraint max_len_value(256);
         };
+        required count_highlight: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
         link posts := .<user[is Post];
     }
 
@@ -67,7 +71,7 @@ module default {
         required post: Post;
         required user: User;
 
-        # canont do a second statement for updating user count_favourite...
+        # cant do a second statement for updating user count_favourite...
 
         trigger favourite_insert after insert for each do (   
             update Post 
@@ -97,6 +101,18 @@ module default {
     type Highlight extending Record {
         required user: User;
         required post: Post;
+
+        trigger highlight_insert after insert for each do (
+            update User
+            filter .id = __new__.user.id
+            set { count_highlight := .count_highlight + 1 }
+        );
+
+        trigger highlight_delete after delete for each do (
+            update User
+            filter .id = __old__.user.id
+            set { count_highlight := .count_highlight - 1 }
+        );
 
         constraint exclusive on ((.user, .post));
     }

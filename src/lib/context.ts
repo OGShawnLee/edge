@@ -5,7 +5,7 @@ import { isFunction, isWritable } from "malachite-ui/predicate";
 
 type FoundUser = Pick<
 	User,
-	"created_at" | "description" | "display_name" | "id" | "location" | "name"
+	"created_at" | "description" | "display_name" | "id" | "location" | "name" | "count_highlight"
 >;
 
 export type OnBookmarkDeleted = (post_id: string) => void;
