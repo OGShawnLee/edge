@@ -22,7 +22,7 @@ export default defineConfig({
       "bottom-color": "#000000",
       "inactive-sidebar-link": "#3C3C3C",
       "datetime-color": "#4B4B4B",
-      "separator-horizontal": "#141414",
+      "separator-horizontal": "#121212",
       "separator-vertical": "#1E1E1E",
       "background-color": "#0C0C0C",
       "dialog-color": "#181818",
