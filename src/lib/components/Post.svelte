@@ -23,7 +23,7 @@
 			</a>
 			<Time created_at={post.created_at} />
 		</header>
-		<h3 class="mb-16px">{post.text}</h3>
+		<h3 class="mb-16px whitespace-pre-line">{post.text}</h3>
 		<div class="flex items-center gap-76px">
 			<PostButton
 				action="/home?/bookmark"
