@@ -8,6 +8,7 @@
 	export let count: number;
 	export let icon: typeof SvelteComponent;
 	export let id: string;
+	export let is_active_icon = false;
 	export let title: string;
 
 	const dispatch = createEventDispatcher<{ delete: string }>();
@@ -21,12 +22,13 @@
 
 		if (result.type !== "success") return;
 
-
 		if (result.data?.operation === "deleted") {
 			count--;
 			dispatch("delete", id);
+			is_active_icon = false;
 		} else if (result.data?.operation === "created") {
 			count++;
+			is_active_icon = true;
 		}
 	}
 </script>
@@ -34,7 +36,9 @@
 <form {action} method="post" on:submit|preventDefault={handle_submit}>
 	<input type="hidden" name="id" value={id} />
 	<Button
-		class="flex items-center gap-1.25 | bg-transparent text-datetime-color"
+		class="flex items-center gap-8px | bg-transparent {is_active_icon
+			? 'text-default-text-color'
+			: 'text-datetime-color'}"
 		{title}
 		type="submit"
 	>

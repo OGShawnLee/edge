@@ -6,6 +6,8 @@ module default {
         };
     }
 
+    global current_user_id: uuid;
+
     type User {
         required created_at: datetime {
             readonly := true;
@@ -124,5 +126,10 @@ module default {
             default := 0;
             constraint min_value(0);
         };
+        property is_favourite := (
+            select exists (
+                select Favourite filter .user.id = global current_user_id and .post.id = Post.id
+            )
+        );
     }
 }

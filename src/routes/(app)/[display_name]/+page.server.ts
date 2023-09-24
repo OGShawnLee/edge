@@ -9,7 +9,10 @@ import { flatten, parse, pick } from "valibot";
 import { user_schema } from "$lib/valibot";
 
 export async function load(event) {
-	const posts = await fetch_user_posts_by_display_name(event.params.display_name);
+	const posts = await fetch_user_posts_by_display_name(
+		event.params.display_name,
+		event.locals.user?.id
+	);
 
 	if (posts.failed) {
 		throw error(500, { message: "Unable to find user." });
@@ -67,8 +70,8 @@ export const actions = {
 	}
 };
 
-function fetch_user_posts_by_display_name(display_name: string) {
-	const client = get_client();
+function fetch_user_posts_by_display_name(display_name: string, current_user_id?: string) {
+	const client = get_client().withGlobals({ current_user_id });
 	return use_await(() => {
 		return e
 			.select(e.Post, (post) => ({
@@ -77,6 +80,7 @@ function fetch_user_posts_by_display_name(display_name: string) {
 				text: true,
 				count_bookmark: true,
 				count_favourite: true,
+				is_favourite: true,
 				order_by: {
 					expression: post.created_at,
 					direction: e.DESC

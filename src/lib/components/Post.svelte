@@ -35,8 +35,10 @@
 			/>
 			<PostButton
 				action="/home?/favourite"
+				active_color="text-rose-500"
 				title="Like or Unlike Post"
 				icon={Heart}
+				is_active_icon={post.is_favourite}
 				id={post.id}
 				count={post.count_favourite}
 			/>

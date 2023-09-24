@@ -13,7 +13,7 @@ export async function load(event) {
 		throw redirect(303, "/auth/sign-in");
 	}
 
-	const feed = await fetch_feed();
+	const feed = await fetch_feed(event.locals.user.id);
 	if (feed.failed) {
 		throw error(500, { message: "Unable to load feed." });
 	}
