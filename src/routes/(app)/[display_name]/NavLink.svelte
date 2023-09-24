@@ -22,7 +22,7 @@
 	export let href: string;
 	export let text: string;
 
-	const { full_href, is_active } = use_active_link("/" + $found_user.display_name, href);
+	$: ({ full_href, is_active } = use_active_link("/" + $found_user.display_name, href));
 </script>
 
 <a class="w-full h-full | transition  hover:bg-separator-horizontal" href={full_href}>
