@@ -73,6 +73,38 @@ export const actions = {
 		const post = await create_post(event.locals.user.id, text_result.data);
 		if (post.failed) return fail(500);
 	},
+	repost: async (event) => {
+		if (isNullish(event.locals.user)) {
+			throw redirect(303, "/auth/sign-in");
+		}
+
+		const data = await event.request.formData();
+		const id = data.get("id");
+
+		if (typeof id !== "string") return fail(400);
+		
+		const client = get_client();		
+		const post_reposted = await e.select(e.Post, () => ({
+			id: true,
+			repost_of: true,
+			filter_single: { id }
+		})).run(client);
+		
+		if (isNullish(post_reposted)) {
+			throw error(400, { message: "Cannot repost that does not exist." });
+		};
+
+		if (post_reposted.repost_of) {
+			throw error(400, { message: "Cannot repost a repost." });
+		}
+
+		const repost = await insert_repost(event.locals.user.id, id);
+		if (repost.failed) {
+			throw error(500, { message: "Unable to repost." });
+		}
+
+		return { operation: "created" };
+	},
 	highlight: async (event) => {
 		if (isNullish(event.locals.user)) {
 			throw redirect(303, "/auth/sign-in");
@@ -177,4 +209,27 @@ class Record {
 			body: JSON.stringify({ post_id: this.post_id, sender_id: this.user_id, receiver_id })
 		});
 	}
+}
+
+function insert_repost(user_id: string, post_id: string) {
+	return use_await(() => 
+		e.insert(e.Repost, {
+			user: create_user_query(user_id),
+			post: create_post_query(post_id)
+		}).run(get_client())
+	)
+}
+
+function create_post_query(post_id: string) {
+	return e.select(e.Post, () => ({
+		id: true,
+		filter_single: { id: post_id }
+	}));
+}
+
+function create_user_query(user_id: string) {
+	return e.select(e.User, () => ({
+		id: true,
+		filter_single: { id: user_id }
+	}));
 }

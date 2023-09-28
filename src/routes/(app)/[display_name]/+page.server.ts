@@ -2,7 +2,7 @@ import type { Input, Issues } from "valibot";
 import e from "edge/edgeql-js";
 import { set_auth_cookie } from "$lib/server/auth";
 import { use_await, use_catch } from "$lib/hooks";
-import { get_client } from "$lib/server/client";
+import { get_client, post_shape } from "$lib/server/client";
 import { error, fail } from "@sveltejs/kit";
 import { isNullish } from "malachite-ui/predicate";
 import { flatten, parse, pick } from "valibot";
@@ -77,12 +77,15 @@ function fetch_user_posts_by_display_name(display_name: string, current_user_id?
 			.select(e.Post, (post) => ({
 				id: true,
 				created_at: true,
+				repost_of: post_shape,
 				text: true,
 				count_bookmark: true,
 				count_favourite: true,
+				count_repost: true,
 				is_bookmarked: true,
 				is_favourited: true,
 				is_highlighted: true,
+				is_reposted: true,
 				order_by: {
 					expression: post.created_at,
 					direction: e.DESC

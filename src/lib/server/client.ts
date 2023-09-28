@@ -15,9 +15,11 @@ export const post_shape = e.shape(e.Post, () => ({
 	text: true,
 	count_bookmark: true,
 	count_favourite: true,
+	count_repost: true,
 	is_bookmarked: true,
 	is_favourited: true,
 	is_highlighted: true,
+	is_reposted: true
 }));
 
 export const user_shape = e.shape(e.User, () => ({

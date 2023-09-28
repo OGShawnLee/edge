@@ -41,6 +41,10 @@ module default {
             default := 0;
             constraint min_value(0);
         };
+        required count_repost: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
         link posts := .<user[is Post];
     }
 
@@ -137,7 +141,8 @@ module default {
             default := datetime_of_statement();
         };
         required user: User;
-        required text: str {
+        repost_of: Post;
+        text: str {
             constraint min_len_value(1);
             constraint max_len_value(280);
         };
@@ -146,6 +151,10 @@ module default {
             constraint min_value(0);
         };
         required count_favourite: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
+        required count_repost: int16 {
             default := 0;
             constraint min_value(0);
         };
@@ -163,6 +172,57 @@ module default {
             select exists (
                 select Highlight filter .user.id = global current_user_id and .post.id = Post.id
             )
+        );
+        property is_reposted := (
+            select exists (
+                select Repost filter .user.id = global current_user_id and .post.id = Post.id
+            )
+        );
+
+        # cant update user count_repost if post is a repost because there is not control flow...
+        # also triggers cant perform multiple statements...
+        # cant add a constraint expression ensuring repost_of is not a repost... because only one hop is allowed...
+    }
+
+    type Repost extending Record {
+        required user: User;
+        required post: Post;
+
+        # cannot add a multiple statements in a single trigger...
+        trigger repost_insert after insert for each do (
+            update Post 
+            filter .id = __new__.post.id
+            set { count_repost := .count_repost + 1 }
+        );
+
+        trigger repost_add_post after insert for each do (
+            insert Post {
+                created_at := __new__.created_at,
+                repost_of := __new__.post,
+                user := __new__.user
+            }
+        );
+
+        trigger repost_increase_user_count after insert for each do (
+            update User
+            filter .id = __new__.user.id
+            set { count_repost := .count_repost + 1 }
+        );
+
+        trigger repost_delete after delete for each do (
+            update Post 
+            filter .id = __old__.post.id
+            set { count_repost := .count_repost - 1 }
+        );
+
+        trigger repost_remove_post after delete for each do (
+            delete Post filter .repost_of.id = __old__.post.id
+        );
+
+        trigger repost_decrease_user_count after delete for each do (
+            update User
+            filter .id = __old__.user.id
+            set { count_repost := .count_repost - 1 }
         );
     }
 }
