@@ -121,7 +121,7 @@ module default {
         constraint exclusive on ((.user, .post));
     }
 
-    scalar type Event extending enum<"favourite">;
+    scalar type Event extending enum<"favourite", "repost">;
 
     type Notification extending Record {
         required sender: User;

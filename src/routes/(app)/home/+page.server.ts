@@ -1,8 +1,9 @@
 import type { RequestEvent } from "@sveltejs/kit";
+import type { Event } from "edge/interfaces";
 import e from "edge/edgeql-js";
 import { fetch_feed } from "$lib/server/feed";
 import { use_await, use_catch } from "$lib/hooks";
-import { get_client } from "$lib/server/client";
+import { get_client, create_post_query, create_user_query } from "$lib/server/client";
 import { post_schema } from "$lib/valibot";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { isNullish } from "malachite-ui/predicate";
@@ -82,17 +83,20 @@ export const actions = {
 		const id = data.get("id");
 
 		if (typeof id !== "string") return fail(400);
-		
-		const client = get_client();		
-		const post_reposted = await e.select(e.Post, () => ({
-			id: true,
-			repost_of: true,
-			filter_single: { id }
-		})).run(client);
-		
+
+		const client = get_client();
+		const post_reposted = await e
+			.select(e.Post, () => ({
+				id: true,
+				repost_of: true,
+				user: true,
+				filter_single: { id }
+			}))
+			.run(client);
+
 		if (isNullish(post_reposted)) {
 			throw error(400, { message: "Cannot repost that does not exist." });
-		};
+		}
 
 		if (post_reposted.repost_of) {
 			throw error(400, { message: "Cannot repost a repost." });
@@ -103,6 +107,12 @@ export const actions = {
 			throw error(500, { message: "Unable to repost." });
 		}
 
+		trigger_notification(event, {
+			post_id: id,
+			sender_id: event.locals.user.id,
+			receiver_id: post_reposted.user.id,
+			event: "repost"
+		});
 		return { operation: "created" };
 	},
 	highlight: async (event) => {
@@ -114,7 +124,7 @@ export const actions = {
 		const id = data.get("id");
 
 		if (typeof id !== "string") return fail(400);
-		
+
 		const controller = new Record(e.Highlight, id, event.locals.user.id);
 		const result = await controller.toggle_record(event);
 
@@ -152,8 +162,8 @@ class Record {
 			.select(this.element, () => ({
 				id: true,
 				filter_single: {
-					post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } })),
-					user: e.select(e.User, () => ({ filter_single: { id: this.user_id } }))
+					post: create_post_query(this.post_id),
+					user: create_user_query(this.user_id)
 				}
 			}))
 			.run(this.client);
@@ -161,8 +171,8 @@ class Record {
 
 	private create_record(this: Record) {
 		const record = e.insert(this.element, {
-			user: e.select(e.User, () => ({ filter_single: { id: this.user_id } })),
-			post: e.select(e.Post, () => ({ filter_single: { id: this.post_id } }))
+			user: create_user_query(this.user_id),
+			post: create_post_query(this.post_id)
 		});
 
 		return e
@@ -197,39 +207,42 @@ class Record {
 		});
 	}
 
-	private trigger_notification(
-		this: Record,
-		receiver_id: string,
-		event?: RequestEvent
-	) {
-		if (this.element === e.Bookmark || this.user_id === receiver_id) return;
-		if (isNullish(event)) throw "event must be provided to trigger notification event!";
-		event.fetch("/api/notification", {
-			method: "POST",
-			body: JSON.stringify({ post_id: this.post_id, sender_id: this.user_id, receiver_id })
+	private trigger_notification(this: Record, receiver_id: string, request_event?: RequestEvent) {
+		if (this.element === e.Bookmark) return;
+		if (isNullish(request_event))
+			throw "request event must be provided to trigger notification event!";
+		trigger_notification(request_event, {
+			post_id: this.post_id,
+			sender_id: this.user_id,
+			receiver_id,
+			event: "favourite"
 		});
 	}
 }
 
 function insert_repost(user_id: string, post_id: string) {
-	return use_await(() => 
-		e.insert(e.Repost, {
-			user: create_user_query(user_id),
-			post: create_post_query(post_id)
-		}).run(get_client())
-	)
+	return use_await(() =>
+		e
+			.insert(e.Repost, {
+				user: create_user_query(user_id),
+				post: create_post_query(post_id)
+			})
+			.run(get_client())
+	);
 }
 
-function create_post_query(post_id: string) {
-	return e.select(e.Post, () => ({
-		id: true,
-		filter_single: { id: post_id }
-	}));
-}
-
-function create_user_query(user_id: string) {
-	return e.select(e.User, () => ({
-		id: true,
-		filter_single: { id: user_id }
-	}));
+function trigger_notification(
+	request_event: RequestEvent,
+	entities: {
+		post_id: string;
+		sender_id: string;
+		receiver_id: string;
+		event: Event;
+	}
+) {
+	if (entities.sender_id === entities.receiver_id) return;
+	request_event.fetch("/api/notification", {
+		method: "POST",
+		body: JSON.stringify(entities)
+	});
 }

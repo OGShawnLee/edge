@@ -8,6 +8,20 @@ export function get_client() {
 	return (client_instance = createClient());
 }
 
+export function create_post_query(post_id: string) {
+	return e.select(e.Post, () => ({
+		id: true,
+		filter_single: { id: post_id }
+	}));
+}
+
+export function create_user_query(user_id: string) {
+	return e.select(e.User, () => ({
+		id: true,
+		filter_single: { id: user_id }
+	}));
+}
+
 export const post_shape = e.shape(e.Post, () => ({
 	id: true,
 	created_at: true,
