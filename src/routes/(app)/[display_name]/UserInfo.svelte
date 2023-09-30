@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Separator } from '$lib/components'
+	import { Count, Separator } from '$lib/components'
 	import { Calendar, MapPin } from "lucide-svelte";
 	import { found_user_context } from "$lib/context";
 
@@ -25,5 +25,12 @@
 			</div>
 		{/if}
 	</div>
+	{#if $found_user.count_favourite || $found_user.count_post || $found_user.count_highlight}
+		<div class="flex gap-16px | text-screen-name-color">
+			<Count count={$found_user.count_post} text="Post" />	
+			<Count count={$found_user.count_favourite} text="Like" />
+			<Count count={$found_user.count_highlight} text="Highlight" />
+		</div>
+	{/if}
 </div>
 <Separator orientation="horizontal"/>

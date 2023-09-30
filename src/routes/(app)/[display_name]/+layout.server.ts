@@ -5,7 +5,7 @@ import { error } from "@sveltejs/kit";
 import { isNullish } from "malachite-ui/predicate";
 
 export async function load(event) {
-	const found_user = await get_user_by_display_name(event.params.display_name);
+	const found_user = await find_user(event.params.display_name);
 
 	if (found_user.failed) {
 		throw error(500, { message: "Unable to find user." });
@@ -18,7 +18,7 @@ export async function load(event) {
 	return { found_user: found_user.data };
 }
 
-function get_user_by_display_name(display_name: string) {
+function find_user(display_name: string) {
 	const client = get_client();
 	return use_await(() => {
 		return e
@@ -29,7 +29,9 @@ function get_user_by_display_name(display_name: string) {
 				name: true,
 				description: true,
 				location: true,
+				count_favourite: true,
 				count_highlight: true,
+				count_post: true,
 				filter_single: { display_name }
 			}))
 			.run(client);

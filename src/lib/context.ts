@@ -3,10 +3,7 @@ import type { Writable } from "svelte/store";
 import { useContext } from "malachite-ui/hooks";
 import { isFunction, isWritable } from "malachite-ui/predicate";
 
-type FoundUser = Pick<
-	User,
-	"created_at" | "description" | "display_name" | "id" | "location" | "name" | "count_highlight"
->;
+type FoundUser = Omit<User, "email" | "password" | "count_bookmark" | "count_repost" | "posts">;
 
 export type OnBookmarkDeleted = (post_id: string) => void;
 

@@ -37,7 +37,19 @@ module default {
             constraint min_len_value(8);
             constraint max_len_value(256);
         };
+        required count_bookmark: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
+        required count_favourite: int32 {
+            default := 0;
+            constraint min_value(0);
+        };
         required count_highlight: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
+        required count_post: int16 {
             default := 0;
             constraint min_value(0);
         };
@@ -68,6 +80,18 @@ module default {
             set { count_bookmark := .count_bookmark - 1 }
         );
 
+        trigger bookmark_increase_user_count after insert for each do (
+            update User
+            filter .id = __new__.user.id
+            set { count_bookmark := .count_bookmark + 1 }
+        );
+
+        trigger bookmark_decrease_user_count after delete for each do (
+            update User
+            filter .id = __old__.user.id
+            set { count_bookmark := .count_bookmark - 1 }
+        );
+
         constraint exclusive on ((.user, .post));
     }
 
@@ -86,6 +110,18 @@ module default {
         trigger favourite_delete after delete for each do (
             update Post 
             filter .id = __old__.post.id
+            set { count_favourite := .count_favourite - 1 }
+        );
+
+        trigger favourite_increase_user_count after insert for each do (
+            update User
+            filter .id = __new__.user.id
+            set { count_favourite := .count_favourite + 1 }
+        );
+
+        trigger favourite_decrease_user_count after delete for each do (
+            update User
+            filter .id = __old__.user.id
             set { count_favourite := .count_favourite - 1 }
         );
 
@@ -177,6 +213,18 @@ module default {
             select exists (
                 select Repost filter .user.id = global current_user_id and .post.id = Post.id
             )
+        );
+
+        trigger post_increase_user_count after insert for each do (
+            update User
+            filter .id = __new__.user.id
+            set { count_post := .count_post + 1 }
+        );
+
+        trigger post_decrease_user_count after delete for each do (
+            update User
+            filter .id = __old__.user.id
+            set { count_post := .count_post - 1 }
         );
 
         # cant update user count_repost if post is a repost because there is not control flow...

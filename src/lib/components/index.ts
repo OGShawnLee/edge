@@ -1,5 +1,6 @@
 export { default as Aside } from "./Aside.svelte";
 export { default as Button } from "./Button.svelte";
+export { default as Count } from "./Count.svelte";
 export { default as Dialog } from "./Dialog.svelte";
 export { default as DialogHeader } from "./DialogHeader.svelte";
 export { default as Feed } from "./Feed.svelte";
