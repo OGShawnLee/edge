@@ -16,7 +16,7 @@
 
 <script lang="ts">
 	import { found_user_context } from "$lib/context";
-
+	
 	const found_user = found_user_context.getContext();
 
 	export let href: string;

@@ -2,7 +2,7 @@ import type { Input, Issues } from "valibot";
 import e from "edge/edgeql-js";
 import { set_auth_cookie } from "$lib/server/auth";
 import { use_await, use_catch } from "$lib/hooks";
-import { get_client, post_shape } from "$lib/server/client";
+import { create_user_query, get_client, post_shape } from "$lib/server/client";
 import { error, fail } from "@sveltejs/kit";
 import { isNullish } from "malachite-ui/predicate";
 import { flatten, parse, pick } from "valibot";
@@ -67,6 +67,28 @@ export const actions = {
 			display_name: locals.user.display_name,
 			name: user.data.name
 		});
+	},
+	follow: async ({ locals, request, params }) => {
+		if (isNullish(locals.user)) {
+			throw error(401, { message: "You have to sign in before following someone!" });
+		}
+
+		if (locals.user.display_name === params.display_name) {
+			throw error(400, { message: "You cannot follow yourself!" });
+		}
+
+		const data = await request.formData();
+		const id = data.get("id");
+
+		if (typeof id !== "string") return fail(400);
+
+		const follow = await toggle_follow(id, locals.user.id);
+
+		if (follow.failed) {
+			throw error(500, { message: "Unable to follow user." });
+		}
+
+		return { operation: follow.data };
 	}
 };
 
@@ -93,6 +115,35 @@ function fetch_user_posts_by_display_name(display_name: string, current_user_id?
 				filter: e.op(post.user.display_name, "=", display_name)
 			}))
 			.run(client);
+	});
+}
+
+function toggle_follow(uid: string, current_user_id: string) {
+	return use_await(async () => {
+		const client = get_client().withGlobals({ current_user_id });
+		const follow = await e.select(e.Follow, () => ({
+			id: true,
+			filter_single: {
+				followed: create_user_query(uid),
+				follower: create_user_query(current_user_id)
+			}
+		})).run(client);
+
+		if (follow) {
+			const deleted = await e
+				.delete(e.Follow, () => ({
+					filter_single: { id: follow.id }
+				}))
+				.run(client);
+			return deleted ? "deleted" : "not-found";
+		}
+
+		e.insert(e.Follow, {
+			follower: create_user_query(current_user_id),
+			followed: create_user_query(uid)
+		}).run(client);
+
+		return "created";
 	});
 }
 

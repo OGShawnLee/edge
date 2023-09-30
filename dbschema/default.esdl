@@ -45,6 +45,14 @@ module default {
             default := 0;
             constraint min_value(0);
         };
+        required count_following: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
+        required count_follower: int16 {
+            default := 0;
+            constraint min_value(0);
+        };
         required count_highlight: int16 {
             default := 0;
             constraint min_value(0);
@@ -57,6 +65,11 @@ module default {
             default := 0;
             constraint min_value(0);
         };
+        property is_followed := (
+            select exists (
+                select Follow filter .follower.id = global current_user_id and .followed.id = User.id
+            )
+        );
         link posts := .<user[is Post];
     }
 
@@ -136,6 +149,38 @@ module default {
         # );
 
         constraint exclusive on ((.user, .post));
+    }
+
+    type Follow extending Record {
+        required follower: User;
+        required followed: User;
+
+        constraint exclusive on ((.follower, .followed));
+        constraint expression on (__subject__.follower != __subject__.followed);
+
+        trigger follow_update_follower_count after insert for each do (
+            update User
+            filter .id = __new__.follower.id
+            set { count_following := .count_following + 1 }
+        );
+
+        trigger follow_update_followed_count after insert for each do (
+            update User
+            filter .id = __new__.followed.id
+            set { count_follower := .count_follower + 1 }
+        );
+
+        trigger follow_decrease_follower_count after delete for each do (
+            update User
+            filter .id = __old__.follower.id
+            set { count_following := .count_following - 1 }
+        );
+
+        trigger follow_decrease_followed_count after delete for each do (
+            update User
+            filter .id = __old__.followed.id
+            set { count_follower := .count_follower - 1 }
+        );
     }
 
     type Highlight extending Record {

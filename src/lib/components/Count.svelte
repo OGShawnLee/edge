@@ -7,13 +7,14 @@
 <script lang="ts">
 	export let count: number;
 	export let text: string;
+	export let noplural = false;
 </script>
 
 {#if count}
-	<div class="flex items-center gap-8px">
-		<span class="text-12px">
-			<b> {count} </b>
-			{pluralize(count, text)}
+	<span class="pr-16px | space-x-1.5px | text-12px text-screen-name-color">
+		<span class="text-white font-medium font-victor"> {count} </span>
+		<span>
+			{noplural ? text : pluralize(count, text)}
 		</span>
-	</div>
+	</span>
 {/if}

@@ -26,7 +26,9 @@
 		{/if}
 	</div>
 	{#if $found_user.count_favourite || $found_user.count_post || $found_user.count_highlight}
-		<div class="flex gap-16px | text-screen-name-color">
+		<div>
+			<Count count={$found_user.count_following} text="Following" noplural />
+			<Count count={$found_user.count_follower} text="Follower" />
 			<Count count={$found_user.count_post} text="Post" />	
 			<Count count={$found_user.count_favourite} text="Like" />
 			<Count count={$found_user.count_highlight} text="Highlight" />
