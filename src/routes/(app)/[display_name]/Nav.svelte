@@ -6,11 +6,21 @@
 	const found_user = found_user_context.getContext();
 </script>
 
-<nav class="h-48px | flex items-center justify-around">
-	<NavLink href="/" text="Posts" />
-	<NavLink href="/likes" text="Likes" />
-	{#if $found_user.count_highlight > 0}
-		<NavLink href="/highlights" text="Highlights" />
-	{/if}
-</nav>
-<Separator orientation="horizontal" />
+{#if $found_user.count_post || $found_user.count_favourite || $found_user.count_highlight > 0}
+	<nav class="h-48px | flex items-center justify-around">
+		{#if $found_user.count_post}
+			<NavLink href="/" text="Posts" />
+		{/if}
+		{#if $found_user.count_favourite}
+			<NavLink href="/likes" text="Likes" />
+		{/if}
+		{#if $found_user.count_highlight > 0}
+			<NavLink href="/highlights" text="Highlights" />
+		{/if}
+	</nav>
+	<Separator orientation="horizontal" />
+{:else}
+	<p class="mt-32px | text-center text-datetime-color">
+		We appear to be the only ones here, partner.
+	</p>
+{/if}
