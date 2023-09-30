@@ -58,7 +58,7 @@
 	<label class="sr-only" for={id}>{label}</label>
 {/if}
 <textarea
-	class="{class_name} {padding} | block | outline-none placeholder-datetime-color resize-none"
+	class="{class_name} {padding} | block | outline-none placeholder-datetime-color resize-none focus:text-white"
 	{name}
 	{id}
 	cols="10"
