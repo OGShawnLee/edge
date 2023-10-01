@@ -16,3 +16,8 @@ export const found_user_context = useContext({
 	component: "found-user",
 	predicate: (context): context is Writable<FoundUser> => isWritable(context)
 });
+
+export const nav_context = useContext({
+	component: "nav",
+	predicate: (context): context is Writable<string> => isWritable(context)
+});

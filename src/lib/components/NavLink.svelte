@@ -15,14 +15,14 @@
 </script>
 
 <script lang="ts">
-	import { found_user_context } from "$lib/context";
+	import { nav_context } from "$lib/context";
 	
-	const found_user = found_user_context.getContext();
+	const base_path = nav_context.getContext();
 
 	export let href: string;
 	export let text: string;
 
-	$: ({ full_href, is_active } = use_active_link("/" + $found_user.display_name, href));
+	$: ({ full_href, is_active } = use_active_link($base_path, href));
 </script>
 
 <a class="w-full h-full | transition-200 hover:bg-separator-horizontal" href={full_href}>

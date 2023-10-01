@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { Count, Separator } from '$lib/components'
+	import { Count, Separator } from "$lib/components";
 	import { Calendar, MapPin } from "lucide-svelte";
 	import { found_user_context } from "$lib/context";
 
 	const formatter = Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "short" });
-	const found_user = found_user_context.getContext()
+	const found_user = found_user_context.getContext();
 </script>
 
 <div class="px-24px py-22px | grid gap-16px">
@@ -27,12 +27,21 @@
 	</div>
 	{#if $found_user.count_favourite || $found_user.count_post || $found_user.count_highlight}
 		<div>
-			<Count count={$found_user.count_following} text="Following" noplural />
-			<Count count={$found_user.count_follower} text="Follower" />
-			<Count count={$found_user.count_post} text="Post" />	
+			<Count
+				count={$found_user.count_follower}
+				text="Follower"
+				href="/{$found_user.display_name}/followers"
+			/>
+			<Count
+				count={$found_user.count_following}
+				text="Following"
+				noplural
+				href="/{$found_user.display_name}/following"
+			/>
+			<Count count={$found_user.count_post} text="Post" />
 			<Count count={$found_user.count_favourite} text="Like" />
 			<Count count={$found_user.count_highlight} text="Highlight" />
 		</div>
 	{/if}
 </div>
-<Separator orientation="horizontal"/>
+<Separator orientation="horizontal" />
