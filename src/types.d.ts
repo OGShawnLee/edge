@@ -9,6 +9,8 @@ type Post = Omit<EPost, "user">;
 
 type User = Pick<EUser, "display_name" | "id" | "name">;
 
+type CardUser = Pick<EUser, "display_name" | "id" | "name" | "description" | "is_followed">;
+
 interface FormItemError {
 	issue?: string;
 	value?: string;
