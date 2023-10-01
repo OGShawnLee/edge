@@ -1,7 +1,7 @@
 import type { Post as EPost, User as EUser, Notification as ENotification } from "edge/interfaces";
 
 type Notification = Omit<ENotification, "receiver"> & {
-	post: Pick<Post, "text">;
+	post?: Pick<Post, "text">;
 	sender: User;
 };
 

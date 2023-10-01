@@ -170,6 +170,14 @@ module default {
             set { count_follower := .count_follower + 1 }
         );
 
+        trigger follow_notification after insert for each do (
+            insert Notification {
+                sender := __new__.follower,
+                receiver := __new__.followed,
+                event := <Event>"follow"
+            }
+        );
+
         trigger follow_decrease_follower_count after delete for each do (
             update User
             filter .id = __old__.follower.id
@@ -202,12 +210,12 @@ module default {
         constraint exclusive on ((.user, .post));
     }
 
-    scalar type Event extending enum<"favourite", "repost">;
+    scalar type Event extending enum<"favourite", "follow", "repost">;
 
     type Notification extending Record {
         required sender: User;
         required receiver: User;
-        required post: Post;
+        post: Post;
         required event: Event;
         required has_been_seen: bool {
             default := false
