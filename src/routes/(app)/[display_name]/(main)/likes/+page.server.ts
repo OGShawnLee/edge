@@ -6,7 +6,7 @@ import { error } from "@sveltejs/kit";
 export async function load(event) {
 	const favourites = await fetch_user_favourites_by_display_name(
 		event.params.display_name,
-		event.locals.user.id
+		event.locals.user?.id
 	);
 
 	if (favourites.failed) {
