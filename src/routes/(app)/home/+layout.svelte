@@ -9,8 +9,10 @@
 </svelte:head>
 
 <Header title="Home" />
-<Nav base_path="/home" let:NavLink>
-	<NavLink href="/" text="Home" />
-	<NavLink href="/following" text="Following"/>
-</Nav>
+{#if data.count_following}
+	<Nav base_path="/home" let:NavLink>
+		<NavLink href="/" text="Home" />
+		<NavLink href="/following" text="Following" />
+	</Nav>
+{/if}
 <slot />
