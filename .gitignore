@@ -12,3 +12,4 @@ vite.config.ts.timestamp-*
 dbschema/edgeql-js
 dbschema/interfaces.ts
 dbschema/migrations/*
+.vercel

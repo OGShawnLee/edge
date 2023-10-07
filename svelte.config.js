@@ -15,7 +15,8 @@ const config = {
 		alias: {
 			edge: "dbschema/*",
 			"@types": "src/types.d.ts"
-		}
+		},
+		csrf: { checkOrigin: false }
 	}
 };
 

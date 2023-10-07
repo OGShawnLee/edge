@@ -29,6 +29,7 @@ function find_user(display_name: string, current_user_id?: string) {
 				name: true,
 				description: true,
 				location: true,
+				avatar: true,
 				count_favourite: true,
 				count_follower: true,
 				count_following: true,

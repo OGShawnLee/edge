@@ -60,6 +60,7 @@ export const actions = {
 		if (correct_password.data) {
 			set_auth_cookie(event.cookies, {
 				id: found_user.data.id,
+				avatar: "",
 				display_name: user.data.display_name,
 				name: found_user.data.name
 			});

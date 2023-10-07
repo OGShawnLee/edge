@@ -7,6 +7,10 @@ import { error, fail } from "@sveltejs/kit";
 import { isNullish } from "malachite-ui/predicate";
 import { flatten, parse, pick } from "valibot";
 import { user_schema } from "$lib/valibot";
+import { put } from "@vercel/blob";
+import { BLOB_READ_WRITE_TOKEN } from "$env/static/private";
+
+export const prerender = false;
 
 export async function load(event) {
 	const posts = await fetch_user_posts_by_display_name(
@@ -25,7 +29,7 @@ export async function load(event) {
 	return { posts: posts.data };
 }
 
-const edit_schema = pick(user_schema, ["name", "description", "location"]);
+const edit_schema = pick(user_schema, ["avatar", "name", "description", "location"]);
 
 export const actions = {
 	"edit-profile": async ({ cookies, request, locals }) => {
@@ -34,6 +38,7 @@ export const actions = {
 		}
 
 		const data = await request.formData();
+		const avatar = data.get("avatar") as File;
 		const description = data.get("description");
 		const name = data.get("name");
 		const location = data.get("location");
@@ -48,8 +53,9 @@ export const actions = {
 			});
 		}
 
-		const updated_user = await update_user(locals.user.id, user.data);
-		if (updated_user.failed) {
+		const user_result = await update_user(locals.user.id, user.data, avatar);
+		if (user_result.failed) {
+			console.log(user_result.error)
 			return fail(500, {
 				issue: "Unable to update user.",
 				description: { value: description as string },
@@ -58,12 +64,13 @@ export const actions = {
 			});
 		}
 
-		if (isNullish(updated_user.data)) {
+		if (isNullish(user_result.data)) {
 			throw error(404, { message: "User to be updated does not exist." });
 		}
 
 		set_auth_cookie(cookies, {
 			id: locals.user.id,
+			avatar: user_result.data.avatar ?? "",
 			display_name: locals.user.display_name,
 			name: user.data.name
 		});
@@ -121,13 +128,15 @@ function fetch_user_posts_by_display_name(display_name: string, current_user_id?
 function toggle_follow(uid: string, current_user_id: string) {
 	return use_await(async () => {
 		const client = get_client().withGlobals({ current_user_id });
-		const follow = await e.select(e.Follow, () => ({
-			id: true,
-			filter_single: {
-				followed: create_user_query(uid),
-				follower: create_user_query(current_user_id)
-			}
-		})).run(client);
+		const follow = await e
+			.select(e.Follow, () => ({
+				id: true,
+				filter_single: {
+					followed: create_user_query(uid),
+					follower: create_user_query(current_user_id)
+				}
+			}))
+			.run(client);
 
 		if (follow) {
 			const deleted = await e
@@ -147,14 +156,30 @@ function toggle_follow(uid: string, current_user_id: string) {
 	});
 }
 
-function update_user(uid: string, data: Input<typeof edit_schema>) {
-	const client = get_client();
-	return use_await(() => {
-		return e
-			.update(e.User, () => ({
-				set: data,
-				filter_single: { id: uid }
-			}))
-			.run(client);
+function update_user(uid: string, data: Input<typeof edit_schema>, file: File | undefined) {
+	return use_await(async () => {
+		
+		if (file) {
+			console.log("uploading")
+			const response = await put("/avatar/" + uid, file, {
+				access: "public",
+				token: BLOB_READ_WRITE_TOKEN
+			});
+			console.log(file, "Run")
+			data.avatar = response.url;
+			console.log(response ?? "Nope");
+		}
+
+		// console.log("After", data)
+
+		// const client = get_client();
+		// const user = await e
+		// 	.update(e.User, () => ({
+		// 		set: data,
+		// 		filter_single: { id: uid }
+		// 	}))
+		// 	.run(client);
+
+		// return user ? { id: user.id, avatar: data.avatar } : null;
 	});
 }

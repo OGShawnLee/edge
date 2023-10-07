@@ -6,6 +6,7 @@ export { default as DialogHeader } from "./DialogHeader.svelte";
 export { default as Feed } from "./Feed.svelte";
 export { default as Header } from "./Header.svelte";
 export { default as Input } from "./Input.svelte";
+export { default as InputImage } from "./InputImage.svelte";
 export { default as Nav } from "./Nav.svelte";
 export { default as NavLink } from "./NavLink.svelte";
 export { default as Post } from "./Post.svelte";

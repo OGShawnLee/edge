@@ -37,6 +37,8 @@ module default {
             constraint min_len_value(8);
             constraint max_len_value(256);
         };
+        avatar: str;
+        cover: str;
         required count_bookmark: int16 {
             default := 0;
             constraint min_value(0);

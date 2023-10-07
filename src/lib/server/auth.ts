@@ -41,6 +41,7 @@ function get_auth_token_state(auth_cookie: string) {
 export function is_auth_token_state(value: unknown): value is JWTPayloadState {
 	return isInterface<JWTPayloadState>(value, {
 		id: isString,
+		avatar: isString,
 		display_name: isString,
 		name: isString
 	});
@@ -48,7 +49,7 @@ export function is_auth_token_state(value: unknown): value is JWTPayloadState {
 
 export function set_auth_cookie(
 	cookies: Cookies,
-	payload: { id: string; display_name: string; name: string }
+	payload: JWTPayloadState
 ) {
 	const token = create_user_jwt(payload);
 	cookies.set(AUTH_COOKIE, token, { maxAge: 60 * 60 * 24 * 3, httpOnly: true, path: "/" });
