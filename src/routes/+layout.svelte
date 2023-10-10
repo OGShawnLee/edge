@@ -1,6 +1,11 @@
 <script>
   import "virtual:uno.css";
   import "@unocss/reset/tailwind-compat.css";
+	import { pinned_post_id } from "$lib/state";
+
+	export let data;
+
+	$: pinned_post_id.set(data.pinned_post_id);
 </script>
 
 <slot />

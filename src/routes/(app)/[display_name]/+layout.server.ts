@@ -1,6 +1,6 @@
 import e from "edge/edgeql-js";
 import { use_await } from "$lib/hooks";
-import { get_client } from "$lib/server/client";
+import { get_client, post_shape } from "$lib/server/client";
 import { error } from "@sveltejs/kit";
 import { isNullish } from "malachite-ui/predicate";
 
@@ -35,6 +35,7 @@ function find_user(display_name: string, current_user_id?: string) {
 				count_highlight: true,
 				count_post: true,
 				is_followed: true,
+				pinned_post: post_shape,
 				filter_single: { display_name }
 			}))
 			.run(client);

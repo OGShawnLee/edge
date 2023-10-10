@@ -70,7 +70,10 @@ module default {
                 select Follow filter .follower.id = global current_user_id and .followed.id = User.id
             )
         );
+        pinned_post: Post;
         link posts := .<user[is Post];
+
+        # pinned post must be a post by the user...
     }
 
     type Bookmark {

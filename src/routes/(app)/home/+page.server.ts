@@ -1,6 +1,7 @@
 import type { RequestEvent } from "@sveltejs/kit";
 import type { Event } from "edge/interfaces";
 import e from "edge/edgeql-js";
+import { PINNED_POST_COOKIE } from "$env/static/private";
 import { fetch_feed } from "$lib/server/feed";
 import { use_await, use_catch } from "$lib/hooks";
 import { get_client, create_post_query, create_user_query } from "$lib/server/client";
@@ -133,8 +134,64 @@ export const actions = {
 		}
 
 		return { operation: result.data };
+	},
+	"pin-post": async (event) => {
+		if (isNullish(event.locals.user)) {
+			throw redirect(303, "/auth/sign-in");
+		}
+
+		const data = await event.request.formData();
+		const id = data.get("id");
+
+		const pinned_post_id = event.cookies.get(PINNED_POST_COOKIE);
+
+		if (typeof id !== "string") return fail(400);
+
+		const result = await toggle_pin(id, event.locals.user.id, pinned_post_id === id);
+		if (result.failed) {
+			if (result.error === 403) throw error(403, { message: "Cannot pin another user's post." });
+			throw error(500, { message: "Unable to pin post." });
+		}
+
+		if (result.data === "deleted") {
+			event.cookies.set(PINNED_POST_COOKIE, "", { path: "/", httpOnly: true });
+		} else if (result.data === "created") {
+			event.cookies.set(PINNED_POST_COOKIE, id, { path: "/", httpOnly: true });
+		}
+
+		return { operation: result.data };
 	}
 };
+
+function toggle_pin(id: string, current_user_id: string, is_pinned: boolean) {
+	return use_await(async () => {
+		const client = get_client();
+
+		if (is_pinned) {
+			const deleted = await e
+				.update(e.User, (user) => ({
+					set: { pinned_post: null },
+					filter_single: { id: current_user_id }
+				}))
+				.run(client);
+			if (deleted?.id) return "deleted";
+			return "not-found";
+		}
+
+		const user = await create_post_query(id).user.run(client);
+
+		if (user?.id !== current_user_id) throw 404;
+
+		await e
+			.update(e.User, () => ({
+				set: { pinned_post: create_post_query(id) },
+				filter_single: { id: current_user_id }
+			}))
+			.run(client);
+
+		return "created";
+	});
+}
 
 function create_post(user_id: string, post: string) {
 	const client = get_client();
