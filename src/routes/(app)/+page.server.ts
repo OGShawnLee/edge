@@ -6,7 +6,7 @@ export async function load(event) {
 
 	const feed = await fetch_feed()
 	if (feed.failed) {
-		throw error(500, { message: "Unable to load feed." })
+		throw error(500, { message: feed.error })
 	}
 
 	return { feed: feed.data, user: event.locals.user };
