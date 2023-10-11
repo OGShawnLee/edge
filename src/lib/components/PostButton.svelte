@@ -13,7 +13,9 @@
 	export let is_active_icon = false;
 	export let title: string;
 
-	const dispatch = createEventDispatcher<{ delete: string }>();
+	const dispatch = createEventDispatcher<{ 
+		submit: "created" | "deleted" | "error"
+	}>();
 
 	async function handle_submit(this: HTMLFormElement) {
 		const response = await fetch(this.action, {
@@ -22,13 +24,14 @@
 		});
 		const result = deserialize(await response.text());
 
-		if (result.type !== "success") return;
+		if (result.type !== "success") return dispatch("submit", "error");
 
 		if (result.data?.operation === "deleted") {
+			dispatch("submit", "deleted");
 			if (isNumber(count)) count--;
-			dispatch("delete", id);
 			is_active_icon = false;
 		} else if (result.data?.operation === "created") {
+			dispatch("submit", "created");
 			if (isNumber(count)) count++;
 			is_active_icon = true;
 		}

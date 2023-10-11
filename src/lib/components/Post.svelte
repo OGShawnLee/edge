@@ -6,9 +6,9 @@
 	import Time from "./Time.svelte";
 	import { Bookmark, Heart, Lock, Repeat, Sparkles } from "lucide-svelte";
 	import { bookmark_route_context } from "$lib/context";
-	import { user as current_user, pinned_post_id, pinned_post } from "$lib/state";
+	import { user as current_user, pinned_post_id, pinned_post, toast } from "$lib/state";
 	import { deserialize } from "$app/forms";
-
+	
 	export let index: number;
 	export let length: number;
 	export let post: Post;
@@ -61,14 +61,27 @@
 								});
 								const result = deserialize(await response.text());
 
-								if (result.type !== "success") return;
+								if (result.type !== "success") {
+									return toast.push({
+										message: "Unable to pin post.",
+										type: "error"
+									});
+								}
 
 								if (result.data?.operation === "deleted") {
 									$pinned_post = undefined;
 									$pinned_post_id = undefined;
+									toast.push({
+										message: "Your post has been unpinned successfully.",
+										type: "success"
+									});
 								} else if (result.data?.operation === "created") {
 									$pinned_post = post;
 									$pinned_post_id = post.id;
+									toast.push({
+										message: "Your post has been pinned successfully.",
+										type: "success"
+									});
 								}
 							}}
 						>
@@ -95,7 +108,25 @@
 						is_active_icon={post.is_bookmarked}
 						id={post.id}
 						count={post.count_bookmark}
-						on:delete={(event) => on_bookmark_deleted?.(event.detail)}
+						on:submit={(event) => {
+							if (event.detail === "created") {
+								return toast.push({
+									message: "Post has been bookmarked successfully.",
+									type: "success"
+								});
+							} else if (event.detail === "error") {
+								return toast.push({
+									message: "Unable to bookmark post.",
+									type: "error"
+								});
+							} else {
+								on_bookmark_deleted?.(post.id);
+								return toast.push({
+									message: "Post has been unbookmarked successfully.",
+									type: "success"
+								});
+							}
+						}}
 					/>
 					<PostButton
 						action="/home?/favourite"
@@ -105,6 +136,13 @@
 						is_active_icon={post.is_favourited}
 						id={post.id}
 						count={post.count_favourite}
+						on:submit={(event) => {
+							if (event.detail !== "error") return;
+							toast.push({
+								message: "Unable to like post.",
+								type: "error"
+							});
+						}}
 					/>
 					<PostButton
 						action="/home?/repost"
@@ -113,6 +151,19 @@
 						is_active_icon={post.is_reposted}
 						id={post.id}
 						count={post.count_repost}
+						on:submit={(event) => {
+							if (event.detail === "created") {
+								return toast.push({
+									message: "Post has been reposted successfully.",
+									type: "success"
+								});
+							} else if (event.detail === "error") {
+								return toast.push({
+									message: "Unable to repost post.",
+									type: "error"
+								});
+							}
+						}}
 					/>
 					<PostButton
 						action="/home?/highlight"
@@ -120,6 +171,24 @@
 						icon={Sparkles}
 						is_active_icon={post.is_highlighted}
 						id={post.id}
+						on:submit={(event) => {
+							if (event.detail === "created") {
+								return toast.push({
+									message: "Post has been highlighted successfully.",
+									type: "success"
+								});
+							} else if (event.detail === "error") {
+								return toast.push({
+									message: "Unable to highlight post.",
+									type: "error"
+								});
+							} else {
+								return toast.push({
+									message: "Post has been unhighlighted successfully.",
+									type: "success"
+								});
+							}
+						}}
 					/>
 				</div>
 			</div>

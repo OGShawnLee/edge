@@ -13,4 +13,5 @@ export { default as Separator } from "./Separator.svelte";
 export { default as Sidebar } from "./Sidebar.svelte";
 export { default as TextArea } from "./TextArea.svelte";
 export { default as Time } from "./Time.svelte";
+export { default as Toast } from "./Toast.svelte";
 export { default as TopHeader } from "./TopHeader.svelte";

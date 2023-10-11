@@ -6,6 +6,7 @@
 	import { found_user_context } from "$lib/context";
 	import { writable } from "svelte/store";
 	import { deserialize } from "$app/forms";
+	import { toast } from "$lib/state";
 
 	export let data;
 
@@ -41,14 +42,27 @@
 				});
 				const result = deserialize(await response.text());
 
-				if (result.type !== "success") return;
+				if (result.type !== "success") {
+					return toast.push({
+						message: "Unable to follow user.",
+						type: "error"
+					});
+				};
 
 				if (result.data?.operation === "deleted") {
 					data.found_user.is_followed = false;
 					$found_user.count_follower--;
+					toast.push({
+						message: "You no longer follow " + data.found_user.name + ".",
+						type: "success"
+					});
 				} else if (result.data?.operation === "created") {
 					data.found_user.is_followed = true;
 					$found_user.count_follower++;
+					toast.push({
+						message: "You now follow " + data.found_user.name + ".",
+						type: "success"
+					});
 				}
 			}}
 		>

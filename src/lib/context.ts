@@ -21,3 +21,13 @@ export const nav_context = useContext({
 	component: "nav",
 	predicate: (context): context is Writable<string> => isWritable(context)
 });
+
+export const toast_context = useContext({
+	component: "toast",
+	predicate: (
+		context
+	): context is (id: number) => {
+		mount(): { destroy(): void };
+		close(): void;
+	} => isFunction(context)
+});
