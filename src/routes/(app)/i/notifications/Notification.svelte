@@ -32,7 +32,7 @@
 			<Time created_at={notification.created_at} />
 		</div>
 		{#if notification.post}
-			<h3 class="text-14px text-screen-name-color">
+			<h3 class="text-14px text-screen-name-color whitespace-pre-line">
 				{notification.post.text}
 			</h3>
 		{/if}
