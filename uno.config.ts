@@ -13,7 +13,7 @@ export default defineConfig({
     "button--border": "px-28px | bg-transparent ring-2 ring-datetime-color focus:(ring-white)",
     "button--top": "px-28px | bg-top-color border-2 border-transparent text-background-color focus:(border-black ring-2 ring-white)",
   },
-  safelist: ["text-lime-400", "text-orange-400"],
+  safelist: ["text-lime-400", "text-orange-400", "bg-rose-900", "bg-indigo-900", "bg-dialog-color"],
   theme: {
     colors: {
       "default-text-color": "#DCDCDC",
