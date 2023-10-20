@@ -25,7 +25,7 @@
 		"edgedb": "^1.3.6",
 		"jsonwebtoken": "^9.0.2",
 		"lucide-svelte": "^0.269.0",
-		"malachite-ui": "^0.9.1",
+		"malachite-ui": "^0.10.1",
 		"prettier": "^3.0.3",
 		"prettier-plugin-svelte": "^3.0.3",
 		"svelte": "^4.2.1",

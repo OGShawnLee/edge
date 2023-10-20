@@ -42,8 +42,8 @@ devDependencies:
     specifier: ^0.269.0
     version: 0.269.0(svelte@4.2.1)
   malachite-ui:
-    specifier: ^0.9.1
-    version: 0.9.1
+    specifier: ^0.10.1
+    version: 0.10.1(svelte@4.2.1)
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
@@ -1342,8 +1342,12 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /malachite-ui@0.9.1:
-    resolution: {integrity: sha512-Sf0ORZY5nj8ZbQH08ddFLLh6tViMpt/xkYMvuedym7I2GKHb3hIzgXAVciyoETc8j89t7dFMBfNpIOjDA96e3A==}
+  /malachite-ui@0.10.1(svelte@4.2.1):
+    resolution: {integrity: sha512-ciceMiJC3g34aBxkASel9TngHlq+Je7xnubdemZjnnWy4viefbZNgvETdtovCC980Cm8/Vz/631z8jRLh3bXuQ==}
+    peerDependencies:
+      svelte: ^3.0.0
+    dependencies:
+      svelte: 4.2.1
     dev: true
 
   /mdn-data@2.0.30:
