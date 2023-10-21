@@ -1,8 +1,12 @@
 <script>
 	import { Aside, Separator, Sidebar, TopHeader } from "$lib/components";
 	import { Toast, ToastGroup } from "malachite-ui"
-	import { toast } from "$lib/state";
+	import { count_unseen_notifications, toast } from "$lib/state";
 	import { slide } from "svelte/transition";
+
+	export let data;
+
+	$: $count_unseen_notifications = data.count_unseen_notifications;
 </script>
 
 <ToastGroup class="fixed bottom-6 z-10 right-1/2 translate-x-1/2 w-md | grid gap-12px" {toast}>

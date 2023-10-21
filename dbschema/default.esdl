@@ -65,6 +65,10 @@ module default {
             default := 0;
             constraint min_value(0);
         };
+        required count_unseen_notifications: int64 {
+            default := 0;
+            constraint min_value(0);
+        };
         property is_followed := (
             select exists (
                 select Follow filter .follower.id = global current_user_id and .followed.id = User.id
@@ -220,9 +224,15 @@ module default {
         required receiver: User;
         post: Post;
         required event: Event;
-        required has_been_seen: bool {
-            default := false
+        required is_unseen: bool {
+            default := true
         };
+
+        trigger on_notification_insert after insert for each do (
+            update User
+            filter .id = __new__.receiver.id
+            set { count_unseen_notifications := .count_unseen_notifications + 1 }
+        );
 
         constraint expression on (__subject__.sender != __subject__.receiver);
     }

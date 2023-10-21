@@ -8,6 +8,10 @@ export function get_client() {
 	return (client_instance = createClient());
 }
 
+export function each_to_uuid(ids: string[]) {
+	return ids.map(e.uuid)
+}
+
 export function create_post_query(post_id: string) {
 	return e.select(e.Post, () => ({
 		id: true,

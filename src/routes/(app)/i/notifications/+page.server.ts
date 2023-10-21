@@ -26,6 +26,7 @@ function fetch_notifications(user_id: string) {
       id: true, 
       created_at: true,
       event: true,
+      is_unseen: true,
       sender: { display_name: true, name: true },
       post: { text: true },
       filter: e.op(notification.receiver.id, "=", e.uuid(user_id)),
