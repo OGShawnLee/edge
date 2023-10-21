@@ -8,7 +8,7 @@
 	import { bookmark_route_context } from "$lib/context";
 	import { user as current_user, pinned_post_id, pinned_post, toast } from "$lib/state";
 	import { deserialize } from "$app/forms";
-	
+
 	export let index: number;
 	export let length: number;
 	export let post: Post;
@@ -102,33 +102,6 @@
 				<h3 class="mb-16px whitespace-pre-line">{post.text}</h3>
 				<div class="flex items-center gap-76px">
 					<PostButton
-						action="/home?/bookmark"
-						title="Bookmark or Unbookmark"
-						icon={Bookmark}
-						is_active_icon={post.is_bookmarked}
-						id={post.id}
-						count={post.count_bookmark}
-						on:submit={(event) => {
-							if (event.detail === "created") {
-								return toast.push({
-									message: "Post has been bookmarked successfully.",
-									type: "success"
-								});
-							} else if (event.detail === "error") {
-								return toast.push({
-									message: "Unable to bookmark post.",
-									type: "error"
-								});
-							} else {
-								on_bookmark_deleted?.(post.id);
-								return toast.push({
-									message: "Post has been unbookmarked successfully.",
-									type: "success"
-								});
-							}
-						}}
-					/>
-					<PostButton
 						action="/home?/favourite"
 						active_color="text-rose-500"
 						title="Like or Unlike Post"
@@ -161,6 +134,33 @@
 								return toast.push({
 									message: "Unable to repost post.",
 									type: "error"
+								});
+							}
+						}}
+					/>
+					<PostButton
+						action="/home?/bookmark"
+						title="Bookmark or Unbookmark"
+						icon={Bookmark}
+						is_active_icon={post.is_bookmarked}
+						id={post.id}
+						count={post.count_bookmark}
+						on:submit={(event) => {
+							if (event.detail === "created") {
+								return toast.push({
+									message: "Post has been bookmarked successfully.",
+									type: "success"
+								});
+							} else if (event.detail === "error") {
+								return toast.push({
+									message: "Unable to bookmark post.",
+									type: "error"
+								});
+							} else {
+								on_bookmark_deleted?.(post.id);
+								return toast.push({
+									message: "Post has been unbookmarked successfully.",
+									type: "success"
 								});
 							}
 						}}
