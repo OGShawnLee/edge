@@ -38,8 +38,21 @@
 
 <script lang="ts">
 	export let created_at: Date;
+	export let type: "post" | "post-page" | "user-info";
 </script>
 
-<time class="ml-12px | text-12px text-datetime-color" datetime={created_at.toISOString()}>
-	{get_relative_time(created_at)}
-</time>
+{#if type === "user-info"}
+	{@const formatter = Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "short" })}
+	<time class="text-12px" datetime={created_at.toISOString()}>
+		Joined {formatter.format(created_at)}
+	</time>
+{:else if type === "post-page"}
+	{@const formatter = Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "medium" })}
+	<time class="text-14px text-screen-name-color" datetime={created_at.toISOString()}>
+		{formatter.format(created_at)}
+	</time>
+{:else if type === "post"}
+	<time class="ml-12px | text-12px text-datetime-color" datetime={created_at.toISOString()}>
+		{get_relative_time(created_at)}
+	</time>
+{/if}

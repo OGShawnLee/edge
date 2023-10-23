@@ -9,7 +9,8 @@
 <div class="sticky top-88px z-10">
 	<div class="absolute bottom-full w-full h-24px | bg-background-color/90 backdrop-filter backdrop-blur-sm" />		
 	<header class="h-64px bg-background-color/90 backdrop-filter backdrop-blur-sm">
-		<div class="h-full px-6 | flex items-center justify-between">
+		<div class="h-full px-6 | flex items-center {$$slots.left ? 'gap-16px' : 'justify-between'}">
+			<slot name="left" />
 			<div class="leading-5">
 				<h1 class="text-top-color text-20px font-semibold">{title}</h1>
 				{#if display_name}

@@ -9,6 +9,8 @@ export { default as Input } from "./Input.svelte";
 export { default as Nav } from "./Nav.svelte";
 export { default as NavLink } from "./NavLink.svelte";
 export { default as Post } from "./Post.svelte";
+export { default as PostButtonSection } from "./PostButtonSection.svelte";
+export { default as PostUser } from "./PostUser.svelte";
 export { default as Separator } from "./Separator.svelte";
 export { default as Sidebar } from "./Sidebar.svelte";
 export { default as TextArea } from "./TextArea.svelte";

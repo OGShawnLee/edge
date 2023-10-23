@@ -2,8 +2,8 @@
 	import type { Post, User } from "@types";
 	import Button from "./Button.svelte";
 	import Separator from "./Separator.svelte";
-	import PostButton from "./PostButton.svelte";
-	import Time from "./Time.svelte";
+	import PostButtonSection from "./PostButtonSection.svelte";
+	import PostUser from "./PostUser.svelte";
 	import { Bookmark, Heart, Lock, Repeat, Sparkles } from "lucide-svelte";
 	import { bookmark_route_context } from "$lib/context";
 	import { user as current_user, pinned_post_id, pinned_post, toast } from "$lib/state";
@@ -42,13 +42,7 @@
 			<slot />
 			<div>
 				<header class="w-full mb-8px | flex items-center gap-24px">
-					<div class="flex items-baseline">
-						<p class="text-top-color font-medium">{user.name}</p>
-						<a class="ml-12px | text-14px text-screen-name-color" href="/{user.display_name}">
-							@{user.display_name}
-						</a>
-						<Time created_at={post.created_at} />
-					</div>
+					<PostUser {user} created_at={post.created_at} />
 					{#if user.id === $current_user?.id}
 						<form
 							action="/home?/pin-post"
@@ -99,98 +93,12 @@
 						</form>
 					{/if}
 				</header>
-				<h3 class="mb-16px whitespace-pre-line">{post.text}</h3>
-				<div class="flex items-center gap-76px">
-					<PostButton
-						action="/home?/favourite"
-						active_color="text-rose-500"
-						title="Like or Unlike Post"
-						icon={Heart}
-						is_active_icon={post.is_favourited}
-						id={post.id}
-						count={post.count_favourite}
-						on:submit={(event) => {
-							if (event.detail !== "error") return;
-							toast.push({
-								message: "Unable to like post.",
-								type: "error"
-							});
-						}}
-					/>
-					<PostButton
-						action="/home?/repost"
-						title="Repost"
-						icon={Repeat}
-						is_active_icon={post.is_reposted}
-						id={post.id}
-						count={post.count_repost}
-						on:submit={(event) => {
-							if (event.detail === "created") {
-								return toast.push({
-									message: "Post has been reposted successfully.",
-									type: "success"
-								});
-							} else if (event.detail === "error") {
-								return toast.push({
-									message: "Unable to repost post.",
-									type: "error"
-								});
-							}
-						}}
-					/>
-					<PostButton
-						action="/home?/bookmark"
-						title="Bookmark or Unbookmark"
-						icon={Bookmark}
-						is_active_icon={post.is_bookmarked}
-						id={post.id}
-						count={post.count_bookmark}
-						on:submit={(event) => {
-							if (event.detail === "created") {
-								return toast.push({
-									message: "Post has been bookmarked successfully.",
-									type: "success"
-								});
-							} else if (event.detail === "error") {
-								return toast.push({
-									message: "Unable to bookmark post.",
-									type: "error"
-								});
-							} else {
-								on_bookmark_deleted?.(post.id);
-								return toast.push({
-									message: "Post has been unbookmarked successfully.",
-									type: "success"
-								});
-							}
-						}}
-					/>
-					<PostButton
-						action="/home?/highlight"
-						title="Highlight or Unhighlight Post"
-						icon={Sparkles}
-						is_active_icon={post.is_highlighted}
-						id={post.id}
-						on:submit={(event) => {
-							if (event.detail === "created") {
-								return toast.push({
-									message: "Post has been highlighted successfully.",
-									type: "success"
-								});
-							} else if (event.detail === "error") {
-								return toast.push({
-									message: "Unable to highlight post.",
-									type: "error"
-								});
-							} else {
-								return toast.push({
-									message: "Post has been unhighlighted successfully.",
-									type: "success"
-								});
-							}
-						}}
-					/>
-				</div>
+				<h3 class="mb-16px whitespace-pre-line">
+					<a href="/{user.display_name}/status/{post.id}">
+						{post.text}
+					</a>
+				</h3>
+				<PostButtonSection {post} type="post" />
 			</div>
 		</div>
 		{#if index != length - 1}
