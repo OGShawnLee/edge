@@ -71,7 +71,7 @@
 		{/if}
 	</div>
 	{#if error?.issue}
-		<div class="flex items-center gap-1.5 | text-rose-400">
+		<div class="flex items-center gap-1.5 | text-rose-400" transition:slide={{ duration: 150 }}>
 			<span class="text-xs"> {error.issue} </span>
 		</div>
 	{/if}
