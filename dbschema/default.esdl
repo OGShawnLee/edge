@@ -19,7 +19,6 @@ module default {
             constraint max_len_value(16);
         };
         required name: str {
-            constraint exclusive;
             constraint min_len_value(1);
             constraint max_len_value(50);
         };
