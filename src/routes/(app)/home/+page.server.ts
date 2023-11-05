@@ -74,6 +74,10 @@ export const actions = {
 
 		const post = await create_post(event.locals.user.id, text_result.data);
 		if (post.failed) return fail(500);
+
+		if (event.url.searchParams.has("with-redirect")) { 
+			throw redirect(303, "/" + event.locals.user.display_name + "/status/" + post.data.id);
+		}
 	},
 	repost: async (event) => {
 		if (isNullish(event.locals.user)) {

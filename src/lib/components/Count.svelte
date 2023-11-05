@@ -13,7 +13,7 @@
 
 {#if count}
 	<svelte:element 
-		class="pr-16px | text-12px text-screen-name-color"
+		class="flex gap-4px | text-12px text-screen-name-color"
 		data-component="count"
 		this={href ? "a" : "span"}
 		{href}

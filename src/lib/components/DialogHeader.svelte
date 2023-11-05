@@ -7,6 +7,7 @@
 	export let close: () => void;
 	export let title: string;
 	export let prompt: Maybe<string> = undefined;
+	export let prompt_mobile = prompt;
 </script>
 
 <header class="p-6 pb-4 | flex items-center gap-16px | border-b-4 border-#202020">
@@ -17,7 +18,8 @@
 	<div class="ml-auto | flex items-center gap-4.5">
 		<slot />
 		<Button class="button button--top" type="submit">
-			{prompt}
+			<span class="hidden md:block"> {prompt} </span>
+			<span class="md:hidden"> {prompt_mobile} </span>
 		</Button>
 	</div>
 </header>

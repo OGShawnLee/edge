@@ -16,6 +16,8 @@ interface FormItemError {
 	value?: string;
 }
 
+type NavTypes = "mobile-nav" | "tab";
+
 interface JWTPayloadState {
 	id: string;
 	display_name: string;

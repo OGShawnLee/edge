@@ -1,18 +1,7 @@
-<script lang="ts" context="module">
-	function hide_scrollbar() {
-		const initial_overflow = document.body.style.overflow;
-		document.body.style.overflow = "hidden";
-		return {
-			destroy: () => {
-				document.body.style.overflow = initial_overflow;
-			}
-		};
-	}
-</script>
-
 <script lang="ts">
-	import { fade, scale } from "svelte/transition";
 	import { Dialog } from "malachite-ui";
+	import { fade, scale } from "svelte/transition";
+	import { hide_scrollbar } from '$lib/actions'
 
 	let initialFocus: HTMLElement | undefined = undefined;
 
@@ -30,7 +19,7 @@
 >
 	<div class="backdrop" use:overlay transition:fade|global={{ duration: 200 }} />
 	<div
-		class="z-10 | w-lg pb-6 bg-dialog-color rounded-lg overflow-hidden"
+		class="w-full h-full pb-6 z-10 | bg-dialog-color rounded-lg overflow-hidden md:w-lg"
 		use:hide_scrollbar
 		use:content
 		transition:scale|global={{ duration: 200, start: 1.15 }}

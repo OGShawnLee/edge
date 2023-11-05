@@ -42,7 +42,9 @@ export const actions = {
 				.run(client);
 		});
 		if (found_user.failed) {
-			throw error(500, { message: "Unable to sign in." });
+			return fail(500, { 
+				issue: "Unable to sign in. Can't retrieve user information." 
+			});
 		}
 		if (isNullish(found_user.data)) {
 			return fail(400, {

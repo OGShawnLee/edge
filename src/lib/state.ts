@@ -9,7 +9,8 @@ export const pinned_post_id = writable<string | undefined>();
 export const pinned_post = writable<Nullable<Post>>();
 export const toast = useToast(3_000, {
   error: "bg-rose-900",
-  success: "bg-indigo-900",
-  info: "bg-input-color",
+  success: "bg-green-900",
+  info: "bg-indigo-900",
 });
+export const mobile_sidebar_open = writable(false);
 export const user = derived(page, page => page.data.user);

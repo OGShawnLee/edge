@@ -12,9 +12,10 @@
 </script>
 
 <div
-	class="flex items-center gap-76px"
+	class="w-full flex items-center {type === 'post-page'
+		? 'justify-between'
+		: 'justify-between xl:justify-initial'} xl:gap-76px"
 	class:px-22px={type === "post-page"}
-	class:justify-between={type === "post-page"}
 >
 	<PostButton
 		action="/home?/favourite"

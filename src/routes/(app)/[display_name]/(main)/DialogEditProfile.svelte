@@ -10,7 +10,7 @@
 
 <Dialog bind:open let:close>
 	<form class="grid gap-4.5" action="?/edit-profile" method="post">
-		<DialogHeader title="Editing Profile" prompt="Update Profile" {close} />
+		<DialogHeader title="Editing Profile" prompt="Update Profile" prompt_mobile="Save" {close} />
 		<div class="grid gap-3 px-6">
 			<Input
 				id="name"

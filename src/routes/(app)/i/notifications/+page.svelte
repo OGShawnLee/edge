@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Notification from "./Notification.svelte";
-	import { Feed, Header } from "$lib/components";
+	import { Feed, Header, ToggleSidebar } from "$lib/components";
 	import { onDestroy } from "svelte";
 	import { count_unseen_notifications } from "$lib/state";
 
@@ -28,7 +28,9 @@
 	<title>Notifications - Edge</title>
 </svete:head>
 
-<Header title="Notifications" display_name={data.user.display_name} />
+<Header title="Notifications" display_name={data.user.display_name} >
+	<ToggleSidebar slot="left" />
+</Header>
 <Feed title="Notifications">
 	{#each data.notifications as notification, index (notification.id)}
 		<Notification {notification} {index} length={data.notifications.length} {seen_notifications}/>

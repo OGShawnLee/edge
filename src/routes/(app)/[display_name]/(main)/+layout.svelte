@@ -2,7 +2,8 @@
 	import DialogEditProfile from "./DialogEditProfile.svelte";
 	import Nav from "./Nav.svelte";
 	import UserInfo from "./UserInfo.svelte";
-	import { Header } from "$lib/components";
+	import { Button, ButtonBack, Header } from "$lib/components";
+	import { Edit } from 'lucide-svelte'
 	import { found_user_context } from "$lib/context";
 	import { writable } from "svelte/store";
 	import { deserialize } from "$app/forms";
@@ -28,8 +29,12 @@
 
 <DialogEditProfile bind:open />
 <Header title={data.found_user.name} display_name={data.found_user.display_name}>
+	<ButtonBack slot="left" />
 	{#if is_current_user}
-		<button class="button button--border" on:click={open_edit_dialog}> Edit Profile </button>
+		<Button class="button md:button--border bg-transparent" title="Edit Profile" on:click={open_edit_dialog}> 
+			<span class="hidden md:block"> Edit Profile </span>
+			<Edit class="md:hidden" size={26} />
+		</Button>
 	{:else if data.user}
 		<form
 			action="/{data.found_user.display_name}?/follow"

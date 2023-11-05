@@ -18,8 +18,8 @@
   }
 
 	:global(::-webkit-scrollbar) {
-		width: 0.75vw;
-		min-width: 0.5rem;
+		width: 0.65rem;
+		/* min-width: 0.5rem; */
 		@apply bg-bottom-color;
 	}
 

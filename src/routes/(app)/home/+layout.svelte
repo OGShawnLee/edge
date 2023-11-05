@@ -1,5 +1,7 @@
 <script>
-	import { Header, Nav } from "$lib/components";
+	import { Header, Nav, ToggleSidebar } from "$lib/components";
+	import { Sun } from "lucide-svelte";
+	import { toast } from "$lib/state";
 
 	export let data;
 </script>
@@ -8,9 +10,11 @@
 	<title>Home - Edge</title>
 </svelte:head>
 
-<Header title="Home" />
+<Header title="Home">
+	<ToggleSidebar slot="left" />
+</Header>
 {#if data.count_following}
-	<Nav base_path="/home" let:NavLink>
+	<Nav base_path="/home" type="tab" let:NavLink>
 		<NavLink href="/" text="Home" />
 		<NavLink href="/following" text="Following" />
 	</Nav>

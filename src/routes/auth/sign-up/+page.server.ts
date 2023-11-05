@@ -4,7 +4,7 @@ import { ConstraintViolationError } from 'edgedb'
 import { user_schema } from '$lib/valibot'
 import { parse, flatten } from 'valibot'
 import { use_await, use_catch } from '$lib/hooks'
-import { error, fail, redirect } from '@sveltejs/kit'
+import { fail, redirect } from '@sveltejs/kit'
 import { get_client } from '$lib/server/client'
 import { genSalt, hash } from 'bcrypt'
 
@@ -30,7 +30,9 @@ export const actions = {
     }
 
     const password_hash = await create_password_hash(user.data.password)
-    if (password_hash.failed) return fail(500)
+    if (password_hash.failed) return fail(500, { 
+      issue: "Unable to sign up. Something is wrong with your password."
+    })
     user.data.password = password_hash.data
 
     const client = get_client()
@@ -59,7 +61,8 @@ export const actions = {
         }
       }
 
-      throw error(500, { message: "Unable to create user." })
+      console.log(err)
+      return fail(500, { issue: "Unable to sign up. Try again later." })
     }
 
     throw redirect(303, "/auth/sign-in")

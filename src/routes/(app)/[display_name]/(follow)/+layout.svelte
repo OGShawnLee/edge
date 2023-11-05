@@ -8,7 +8,7 @@
   title={data.found_user.name}
   display_name={data.found_user.display_name}
 />
-<Nav base_path="/{data.found_user.display_name}" let:NavLink>
+<Nav base_path="/{data.found_user.display_name}" type="tab" let:NavLink>
   {#if data.found_user.count_follower}
     <NavLink href="/followers" text="Followers" />
   {/if}

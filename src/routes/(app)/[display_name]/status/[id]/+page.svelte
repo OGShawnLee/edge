@@ -1,6 +1,6 @@
 <script>
-	import { Header, PostUser, PostButtonSection, Separator, Time } from "$lib/components";
-	import { ArrowLeft } from "lucide-svelte";
+	import { ButtonBack, Header, PostUser, PostButtonSection, Separator, Time } from "$lib/components";
+	import { ArrowLeftSquare } from 'lucide-svelte'
 
 	export let data;
 </script>
@@ -10,13 +10,14 @@
 </svelte:head>
 
 <Header title="Post">
+	<!-- <ButtonBack slot="left" /> -->
 	<a
-		class="button button--square"
 		href="/{data.found_user.display_name}"
 		aria-label="View {data.found_user.name}'s profile"
 		title="View {data.found_user.name}'s profile"
+		slot="left"
 	>
-		<ArrowLeft size={18}/>
+		<ArrowLeftSquare size={26} />
 	</a>
 </Header>
 <main>

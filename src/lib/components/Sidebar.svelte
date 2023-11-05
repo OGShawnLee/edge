@@ -1,19 +1,24 @@
 <script lang="ts">
 	import Link from "./SidebarLink.svelte";
+	import { SidebarMobile  } from "$lib/layout";
 	import UserStatus from "./SidebarUserStatus.svelte";
 	import { Bell, Bookmark, Home, UserSquare } from "lucide-svelte";
 	import { count_unseen_notifications, user } from "$lib/state";
 </script>
 
 <!-- top-header-height -> 64px + container-y-gap -> 24px = 88px -->
-<nav class="sticky h-full top-88px w-300px pt-16px pb-38px | flex flex-col justify-between">
+<nav
+	class="hidden sticky h-full top-88px w-300px pt-16px pb-38px | xl:flex flex-col justify-between"
+>
 	{#if $user}
 		<div class="flex flex-col items-start gap-32px">
 			<Link href="/home" text="Home" icon={Home} />
 			<div class="relative">
 				<Link href="/i/notifications" text="Notifications" icon={Bell} />
 				{#if $count_unseen_notifications > 0}
-					<div class="absolute top-0 left-0 | flex items-center justify-center | w-16px h-16px | text-12px font-bold | bg-red-500 rounded-full">
+					<div
+						class="absolute top-0 left-0 | flex items-center justify-center | w-16px h-16px | text-12px font-bold | bg-red-500 rounded-full"
+					>
 						{$count_unseen_notifications}
 					</div>
 				{/if}
@@ -30,6 +35,9 @@
 		{/if}
 	</div>
 </nav>
+
+<!-- mobile sidebar -->
+<SidebarMobile />
 
 <style>
 	/* top-header-height -> 64px + container-gap -> 28px = 88px */

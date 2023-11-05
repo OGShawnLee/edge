@@ -3,6 +3,7 @@
 	import type { Maybe, Nullable } from "malachite-ui/types";
 	import CharCount from "./CharCount.svelte";
 	import TextArea from "./TextArea.svelte";
+	import { slide } from 'svelte/transition'
 
 	export let error: Maybe<FormItemError> = undefined;
 	export let id: string;
@@ -37,7 +38,7 @@
 		<CharCount {char_count} {maxlength} {minlength} />
 	</div>
 	<div
-		class="min-h-12 | flex | bg-input-color rounded-8px overflow-hidden focus-within:(ring-2 ring-white)"
+		class="min-h-12 | flex | bg-input-color/50 rounded-8px overflow-hidden focus-within:(ring-2 ring-white)"
 	>
 		{#if icon}
 			<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-input-icon-box-color">

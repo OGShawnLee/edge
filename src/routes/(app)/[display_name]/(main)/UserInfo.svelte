@@ -26,7 +26,7 @@
 		{/if}
 	</div>
 	{#if $found_user.count_favourite || $found_user.count_post || $found_user.count_highlight}
-		<div>
+		<div class="flex flex-wrap gap-x-4 gap-y-1.25">
 			<Count
 				count={$found_user.count_follower}
 				text="Follower"

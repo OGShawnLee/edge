@@ -35,6 +35,7 @@
 	let class_name: Nullable<string> = "w-full bg-transparent";
 
 	export { class_name as class };
+	export let autofocus = false;
 	export let char_count = 0;
 	export let element: HTMLTextAreaElement | undefined = undefined;
 	export let id: string;
@@ -57,12 +58,14 @@
 {#if label}
 	<label class="sr-only" for={id}>{label}</label>
 {/if}
+<!-- svelte-ignore a11y-autofocus -->
 <textarea
 	class="{class_name} {padding} | block | outline-none placeholder-datetime-color resize-none focus:text-white"
 	{name}
 	{id}
 	cols="10"
 	rows="1"
+	{autofocus}
 	{minlength}
 	{maxlength}
 	{placeholder}

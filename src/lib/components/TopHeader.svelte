@@ -41,7 +41,7 @@
 <!-- logo-length = layout-x-gap + central-content-x-marging = 356px -->
 <!-- we use that length to push the text-area to the middle of the page x-axis  -->
 
-<div class="sticky top-0 z-10 h-64px | bg-black">
+<div class="hidden sticky top-0 z-10 h-64px | bg-black xl:block">
 	<div class="max-w-6xl w-full h-full mx-auto | flex items-center gap-32px">
 		<!-- logo-length applied here as min-w-300px -->
 		<a class="uppercase text-top-color text-24px font-bold tracking-1" href="/"> Edge | X </a>
