@@ -38,3 +38,13 @@
 		<Aside />
 	</div>
 </div>
+
+<div class="hidden xl:block">
+	<div class="fixed left-0 inset-y-0 w-0.65rem | bg-black" />
+	<div class="fixed left-0.65rem top-64px w-64px h-64px | bg-black">
+		<div class="w-full h-full | bg-background-color rounded-tl-16px" />
+	</div>
+	<div class="fixed right-0 top-64px w-64px h-64px | bg-black">
+		<div class="w-full h-full | bg-background-color rounded-tr-16px" />
+	</div>
+</div>
