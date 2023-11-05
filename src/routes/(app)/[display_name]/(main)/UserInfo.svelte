@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Count, Separator } from "$lib/components";
-	import { Calendar, MapPin } from "lucide-svelte";
+	import { Calendar, MapPin, Smile } from "lucide-svelte";
 	import { found_user_context } from "$lib/context";
 
 	const formatter = Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "short" });
@@ -22,6 +22,14 @@
 			<div class="flex items-center gap-8px">
 				<MapPin size="18" />
 				<span class="text-12px"> {$found_user.location} </span>
+			</div>
+		{/if}
+		{#if $found_user.is_following}
+			<div class="flex items-center gap-8px">
+				<Smile size="18" />
+				<span class="text-12px"> 
+					{$found_user.is_followed ? "Follows you back" : "Follows you"}  
+				</span>
 			</div>
 		{/if}
 	</div>

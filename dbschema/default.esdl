@@ -73,6 +73,11 @@ module default {
                 select Follow filter .follower.id = global current_user_id and .followed.id = User.id
             )
         );
+        property is_following := (
+            select exists (
+                select Follow filter .follower.id = User.id and .followed.id = global current_user_id
+            )
+        );
         pinned_post: Post;
         link posts := .<user[is Post];
 

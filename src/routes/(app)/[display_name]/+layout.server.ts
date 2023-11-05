@@ -35,6 +35,7 @@ function find_user(display_name: string, current_user_id?: string) {
 				count_highlight: true,
 				count_post: true,
 				is_followed: true,
+				is_following: true,
 				pinned_post: post_shape,
 				filter_single: { display_name }
 			}))
