@@ -8,11 +8,7 @@ module default {
 
     global current_user_id: uuid;
 
-    type User {
-        required created_at: datetime {
-            readonly := true;
-            default := datetime_of_statement();
-        };
+    type User extending Record {
         required display_name: str {
             constraint exclusive;
             constraint min_len_value(1);
