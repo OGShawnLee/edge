@@ -9,7 +9,7 @@
 
 <div class="px-24px py-22px | grid gap-16px">
 	{#if $found_user.description}
-		<p class="text-16px">{$found_user.description}</p>
+		<p class="text-16px whitespace-pre-line">{$found_user.description}</p>
 	{/if}
 	<div class="grid gap-8px text-screen-name-color">
 		<div class="flex items-center gap-8px">
