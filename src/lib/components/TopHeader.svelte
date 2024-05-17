@@ -10,7 +10,6 @@
 	let char_count = 0;
 	let open = false;
 	let initial_focus: HTMLTextAreaElement;
-	let post = "";
 
 	function open_text_area() {
 		open = true;
@@ -29,7 +28,6 @@
 				placeholder="What is happening?"
 				bind:char_count
 				bind:element={initial_focus}
-				bind:value={post}
 			/>
 		</div>
 	</form>
