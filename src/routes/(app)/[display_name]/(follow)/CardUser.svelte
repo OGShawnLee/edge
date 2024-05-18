@@ -15,7 +15,7 @@
         @{user.display_name}
       </p>
     </h3>
-    <p>{user.description}</p>
+    <p class="whitespace-pre-wrap">{user.description}</p>
   </div>
 	{#if index !== length - 1}
 		<Separator orientation="horizontal" />
