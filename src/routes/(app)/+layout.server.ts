@@ -6,7 +6,7 @@ import { isNullish } from 'malachite-ui/predicate'
 
 export async function load(event) {
   if (isNullish(event.locals.user)) {
-    throw redirect(303, "/auth/sign-in");
+    return { count_unseen_notifications: 0 };
   }
 
   const user = await use_await(() => {

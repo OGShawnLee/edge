@@ -10,9 +10,9 @@
 <nav
 	class="hidden sticky h-full top-88px w-300px pt-16px pb-38px | xl:flex flex-col justify-between"
 >
-	{#if $user}
-		<div class="flex flex-col items-start gap-32px">
-			<Link href="/home" text="Home" icon={Home} />
+	<div class="flex flex-col items-start gap-32px">
+		<Link href={$user ? "/home" : "/"} text="Home" icon={Home} />
+		{#if $user}
 			<div class="relative">
 				<Link href="/i/notifications" text="Notifications" icon={Bell} />
 				{#if $count_unseen_notifications > 0}
@@ -25,8 +25,8 @@
 			</div>
 			<Link href="/{$user.display_name}" text="Profile" icon={UserSquare} />
 			<Link href="/i/bookmarks" text="Bookmarks" icon={Bookmark} />
-		</div>
-	{/if}
+		{/if}
+	</div>
 	<div class="w-full">
 		{#if $user}
 			<UserStatus user={$user} />

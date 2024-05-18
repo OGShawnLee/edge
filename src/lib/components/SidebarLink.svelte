@@ -7,7 +7,12 @@
 	export let text: string;
 	export let icon: typeof SvelteComponent;
 
-	$: is_active = href ? $page.url.pathname.includes(href) : false;
+	function get_is_active(href: string | undefined, pathname: string) {
+		if (href == "/") return pathname == href;
+		return href ? pathname.includes(href) : false;
+	}
+
+	$: is_active = get_is_active(href, $page.url.pathname);
 </script>
 
 {#if as === "form"}
