@@ -50,7 +50,7 @@
 				<p class="text-sm">
 					Already have an account?
 					<a
-						class="text-screen-name outline-none focus:(underline text-top-color) hover:(underline text-top-color)"
+						class="text-teal-400 outline-none focus:(underline text-teal-300) hover:(underline text-teal-300)"
 						href="/auth/sign-in"
 					>
 						Sign in!

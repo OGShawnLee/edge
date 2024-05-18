@@ -43,7 +43,12 @@
 				<h1 class="text-2xl text-white font-medium font-bold">Sign in</h1>
 				<p class="text-sm">
 					Dont have an account?
-					<a class="text-aqua-50 hover:underline" href="/auth/sign-up"> Sign up! </a>
+					<a
+						class="text-teal-400 outline-none focus:(underline text-teal-300) hover:(underline text-teal-300)"
+						href="/auth/sign-up"
+					>
+						Sign up!
+					</a>
 				</p>
 			</header>
 		</div>
