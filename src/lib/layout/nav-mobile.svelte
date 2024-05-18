@@ -5,7 +5,7 @@
 </script>
 
 <Nav base_path="/home" type="mobile-nav" let:NavLink>
-	<NavLink href="/home" text="Home" icon={Home} label="go to home page" />
+	<NavLink href={$user ? "/home" : "/"} text="Home" icon={Home} label="go to home page" />
 	{#if $user}
 		<NavLink
 			href="/i/notifications"
